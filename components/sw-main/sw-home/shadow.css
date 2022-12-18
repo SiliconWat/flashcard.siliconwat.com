@@ -1,0 +1,13 @@
+:host {
+    display: none;
+    margin: 0 50px;
+    min-height: 50vh;
+    font-size: large;
+    color: white;
+}
+
+@media (max-width: 480px) {
+    :host {
+        margin: 0 30px;
+    }
+}

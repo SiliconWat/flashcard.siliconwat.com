@@ -1,0 +1,45 @@
+:root {
+    --palette-color-1: #264653;
+    --palette-color-2: #2A9D8F;
+    --palette-color-3: #bde0fe;
+    --palette-color-4: #457b9d;
+    --palette-color-5: black;
+}
+
+html {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: medium;
+    background-image: url(background.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+body {
+    margin: 0;
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+sw-header {
+    --theme-color-1: var(--palette-color-1);
+    --theme-color-2: var(--palette-color-2);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden scroll;
+}
+
+sw-main {
+    --theme-color-1: var(--palette-color-1);
+    --theme-color-2: var(--palette-color-2);
+}
+
+sw-footer {
+    --theme-color: var(--palette-color-5);
+}
