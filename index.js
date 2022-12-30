@@ -1,15 +1,13 @@
 import "/components/sw-main/sw-home/element.mjs";
 import "/components/sw-main/sw-game/element.mjs";
 
-import { FRONTEND, SHOWCASE, QUIZ } from "/global.mjs";
+import { FRONTEND_COURSE as FRONTEND, SHOWCASE, QUIZ, GAME } from "https://thonly.org/global.mjs";
 window.onload = async () => {
     await import(`${FRONTEND}/components/sw-music/element.mjs`);
     await import(`${SHOWCASE}/components/sw-coin/element.mjs`);
     await import(`${QUIZ}/components/sw-header/element.mjs`);
     await import(`${QUIZ}/components/sw-main/element.mjs`);
     await import(`${QUIZ}/components/sw-footer/element.mjs`);
-
-    const { GAME } = await import(`${QUIZ}/global.mjs`);
     if (!window.TESTING) window.clearCache();
     
     await document.querySelector('sw-main').render();
