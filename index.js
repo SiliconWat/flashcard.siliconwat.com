@@ -3,13 +3,14 @@ import "/components/sw-main/sw-game/element.mjs";
 
 import { FRONTEND_COURSE as FRONTEND, SHOWCASE, QUIZ, GAME } from "https://thonly.org/global.mjs";
 window.onload = async () => {
+    await import(`${QUIZ}/components/sw-footer/element.mjs`);
     await import(`${FRONTEND}/components/sw-music/element.mjs`);
     await import(`${SHOWCASE}/components/sw-coin/element.mjs`);
+
     await import(`${QUIZ}/components/sw-header/element.mjs`);
     await import(`${QUIZ}/components/sw-main/element.mjs`);
-    await import(`${QUIZ}/components/sw-footer/element.mjs`);
     if (!window.TESTING) window.clearCache();
-    
+
     await document.querySelector('sw-main').render();
     document.documentElement.style.backgroundImage = GAME[2];
     document.body.style.display = 'flex';
