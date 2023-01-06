@@ -1,4 +1,3 @@
-import "/components/sw-main/sw-game/element.mjs";
 import { FRONTEND_COURSE as FRONTEND, SHOWCASE, QUIZ, GAME } from "https://thonly.org/global.mjs";
 
 window.onload = async () => {
@@ -8,6 +7,7 @@ window.onload = async () => {
     await import(`${QUIZ}/components/sw-header/element.mjs`);
     await import(`${QUIZ}/components/sw-footer/element.mjs`);
     await import(`${QUIZ}/components/sw-main/sw-home/element.mjs`);
+    await import(`${QUIZ}/components/sw-main/sw-game/element.mjs`);
     await import(`${QUIZ}/components/sw-main/element.mjs`);
     if (!window.TESTING) window.clearCache();
 
