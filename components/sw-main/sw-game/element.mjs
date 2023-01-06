@@ -7,7 +7,7 @@ class SwGame extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
-    render(course, c) {
+    render(course, c, ref) {
         this.shadowRoot.getElementById('course').textContent = course.capitalize();
         this.shadowRoot.getElementById('chapter').textContent = `Chapter ${c}`;
         this.style.display = 'block';
