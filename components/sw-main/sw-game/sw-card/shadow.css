@@ -1,5 +1,6 @@
 :host {
     font-size: large;
+    color: white;
 }
 
 @media (max-width: 480px) {
