@@ -42,13 +42,15 @@ template.innerHTML = `
         <section>
             <h4>Reward Summary</h4>
             <h5>Level Mid</h5>
-            <h5>00:00 | 00:00</h5>
+            <h5>Time Left/New High 00:00</h5>
+            <h5>Highest 00:00</h5>
         </section>
         <ul>
             <li class="corrects">Correct: <span id="correct"></span></li>
             <li class="wrongs">Wrong: <span id="wrong"></span></li>
             <hr>
-            <li class="score">New High Score <span id="score">0% | 0%</span></li>
+            <li class="score"><b id="high">High Score</b> <span id="score">0%</span></li>
+            <li class="Highest">Highest <span id="highest">0%</span></li>
         </ul>
         <section>
             <button id="restart" onclick="this.getRootNode().host.restart(event)">Replay Game</button>
