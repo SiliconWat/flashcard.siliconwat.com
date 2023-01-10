@@ -6,6 +6,7 @@ class SwCard extends HTMLElement {
 
     #level;
     #mode;
+    #timer;
 
     constructor() {
         super();
@@ -45,6 +46,7 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelector('main').style.display = 'block';
                 break;
             case "play":
+                this.#startTimer()
                 this.#renderCard();
                 this.shadowRoot.querySelector('main').style.display = 'block';
                 break;
@@ -58,13 +60,9 @@ class SwCard extends HTMLElement {
         localStorage.setItem(this.#level, event.target.value);
     }
 
-    exit(event) {
-        localStorage.removeItem(this.#mode);
-        this.renderMode('setting');
-    }
-
     #renderCard() {
         const current = Number(localStorage.getItem(`${this.#pointer}-current`));
+        if (localStorage.getItem(this.#mode) === 'study') this.#startTimer();
 
         if (this.#game[current]) {
             this.shadowRoot.getElementById('front').innerHTML = this.#game[current][0];
@@ -106,8 +104,52 @@ class SwCard extends HTMLElement {
         }
     }
 
+    #startTimer() {
+        clearInterval(this.#timer);
+        const mode = localStorage.getItem(this.#mode);
+        const startTime = mode === 'study' ? new Date() : this.#levelTime;
+        this.shadowRoot.getElementById('timer').textContent = this.#getFormattedDuration((mode === 'study' ? (new Date() - startTime) : (startTime - new Date())) / 1000);
+
+        this.#timer = setInterval(mode => {
+            const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - startTime) : (startTime - new Date())) / 1000);
+            this.shadowRoot.getElementById('timer').textContent = timerDuration;
+
+            if (mode === 'play' && timerDuration === "00 : 00") this.#renderResult();
+
+        }, 1000, mode);
+    }
+
+    get #levelTime() {
+        const date = new Date();
+        switch (localStorage.getItem(this.#level)) {
+            case "junior":
+                return new Date(date.getTime() + 10*this.#game.length*1000);
+            case "mid":
+                return new Date(date.getTime() + 6*this.#game.length*1000);
+            case "senior":
+                return new Date(date.getTime() + 3*this.#game.length*1000);
+        }
+    }
+
+    #getFormattedDuration(totalSeconds) {
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor(totalSeconds % 3600 / 60);
+        const s = Math.floor(totalSeconds % 3600 % 60);
+    
+        const hours = String(h).padStart(2, '0');
+        const minutes = String(m).padStart(2, '0');
+        const seconds = String(s).padStart(2, '0');
+    
+        return h > 0 ? `${hours} : ${minutes} : ${seconds}` : `${minutes} : ${seconds}`;
+    }
+
+    exit(event) {
+        localStorage.removeItem(this.#mode);
+        this.renderMode('setting');
+    }
+
     #renderResult() {
-        let correct = 0, wrong = 0, skipped = 0;
+        /*let correct = 0, wrong = 0, skipped = 0;
 
         this.#game.forEach(problem => {
             const answer = localStorage.getItem(`${this.#pointer}-problem${problem.id}-answer`);
@@ -132,8 +174,9 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('restart').disabled = localStorage.getItem(this.#pointer) === "completed";
         this.shadowRoot.getElementById('restart').style.textDecorationLine = localStorage.getItem(this.#pointer) === "completed" ? "line-through" : "none";
         this.shadowRoot.getElementById('collect').disabled = true;
-        this.shadowRoot.getElementById('collect').style.textDecorationLine = localStorage.getItem(this.#pointer) === "completed" ? "line-through" : "none";
+        this.shadowRoot.getElementById('collect').style.textDecorationLine = localStorage.getItem(this.#pointer) === "completed" ? "line-through" : "none";*/
 
+        this.shadowRoot.querySelector('main').style.display = 'none';
         this.shadowRoot.querySelector('footer').style.display = 'block';
     }
 

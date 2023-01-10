@@ -15,7 +15,7 @@ header, main, footer {
     box-sizing: border-box;
 }
 
-aside {
+#study, #play {
     display: none;
 }
 

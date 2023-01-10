@@ -16,7 +16,7 @@ template.innerHTML = `
     <main>
         <section>
             <h4>Card <span id="current"></span> of <span id="total"></span></h4>
-            <h5>00 : 00</h5>
+            <h5 id="timer"></h5>
             <aside>
                 <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
