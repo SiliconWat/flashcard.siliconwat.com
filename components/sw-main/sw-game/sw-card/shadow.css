@@ -1,6 +1,22 @@
 :host {
     font-size: large;
-    color: white;
+}
+
+header, main, footer {
+    display: none;
+    background-color: rgba(255, 255, 255, 70%);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    color: currentColor;
+    margin: 50px auto;
+
+    padding: 30px;
+    max-width: 700px;
+    box-sizing: border-box;
+}
+
+aside {
+    display: none;
 }
 
 @media (max-width: 480px) {

@@ -4,13 +4,13 @@ template.innerHTML = `
     <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/shadow.css">
     <header>
         <label>Game Level</label>
-        <select>
-            <option>Junior</option>
-            <option>Mid</option>
-            <option>Senior</option>
+        <select onchange="this.getRootNode().host.level(event)">
+            <option id="junior" value="junior">Junior</option>
+            <option id="mid" value="mid">Mid</option>
+            <option id="senior" value="senior">Senior</option>
         </select>
-        <button>Enter Study Mode</button>
-        <button>Enter Play Mode</button>
+        <button onclick="this.getRootNode().host.renderMode('study')">Enter Study Mode</button>
+        <button onclick="this.getRootNode().host.renderMode('play')">Enter Play Mode</button>
         <p>swipe instructions</p>
     </header>
     <main>
@@ -23,18 +23,18 @@ template.innerHTML = `
             </aside>
         </section>
         <section>
-            <div id="front">front</div>
-            <div id="back">back</div>
+            <div id="front"></div>
+            <div id="back"></div>
         </section>
         <section>
-            <aside>
+            <aside id="study">
+                <button onclick="this.getRootNode().host.shuffle(event)">Shuffle Cards</button>
+                <button onclick="this.getRootNode().host.exit(event)">Exit</button>
+            </aside>
+            <aside id="play">
                 <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
                 <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
-                <button id="quit" onclick="this.getRootNode().host.finish(event)">Quit</button>
-            </aside>
-            <aside>
-                <button>Shuffle Cards</button>
-                <button id="exit" onclick="this.getRootNode().host.finish(event)">Exit</button>
+                <button onclick="this.getRootNode().host.exit(event)">Quit</button>
             </aside>
         </section>
     </main>
@@ -53,7 +53,7 @@ template.innerHTML = `
             <li class="Highest">Highest <span id="highest">0%</span></li>
         </ul>
         <section>
-            <button id="restart" onclick="this.getRootNode().host.restart(event)">Replay Game</button>
+            <button id="restart" onclick="this.getRootNode().host.restart(event)">Restart Game</button>
             <button id="collect">Collect Coins</button>
         </section>
     </footer>
