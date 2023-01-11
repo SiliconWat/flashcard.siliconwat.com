@@ -129,13 +129,15 @@ class SwCard extends HTMLElement {
 
     get #levelTime() {
         const date = new Date();
+        const cards = this.cards;
+        
         switch (localStorage.getItem(this.#level)) {
             case "junior":
-                return new Date(date.getTime() + 10*this.cards.length*1000);
+                return new Date(date.getTime() + 9*cards.length*1000);
             case "mid":
-                return new Date(date.getTime() + 6*this.cards.length*1000);
+                return new Date(date.getTime() + 6*cards.length*1000);
             case "senior":
-                return new Date(date.getTime() + 3*this.cards.length*1000);
+                return new Date(date.getTime() + 3*cards.length*1000);
         }
     }
 
@@ -174,9 +176,10 @@ class SwCard extends HTMLElement {
     }
 
     submit(event) {
+        const cards = this.cards;
         const current = Number(localStorage.getItem(this.#current));
         const choice = event.target.id === 'true';
-        const answer = this.#game.some(card => card[0] === this.cards[current][0] && card[1] === this.cards[current][1]);
+        const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1]);
 
         if (choice === answer) {
             localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
@@ -232,10 +235,11 @@ class SwCard extends HTMLElement {
     }
 
     #renderResult() {    
+        const cards = this.cards;
         const correct = Number(localStorage.getItem(this.#correct));
         const wrong = Number(localStorage.getItem(this.#wrong));
 
-        const score = this.cards.length > 0 ? Math.round((correct - wrong) / this.cards.length * 100) : 0;
+        const score = cards.length > 0 ? Math.round((correct - wrong) / cards.length * 100) : 0;
         const Score = this.#setScore(score);
 
         this.shadowRoot.getElementById('correct').textContent = correct;
@@ -255,10 +259,10 @@ class SwCard extends HTMLElement {
     }
 
     #setScore(score) {
-        const level = `${this.#pointer}-score-${localStorage.getItem(this.#level)}`;
-        let Score = localStorage.getItem(level);
+        const levelScore = `${this.#pointer}-score-${localStorage.getItem(this.#level)}`;
+        let Score = localStorage.getItem(levelScore);
         Score = Score === null ? score : Number(Score);
-        localStorage.setItem(level, Math.max(Score, score));
+        localStorage.setItem(levelScore, Math.max(Score, score));
         return Score;
     }
 
