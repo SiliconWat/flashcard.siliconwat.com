@@ -20,6 +20,7 @@ template.innerHTML = `
             <aside>
                 <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
+                <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
         </section>
         <section>
@@ -28,12 +29,16 @@ template.innerHTML = `
         </section>
         <section>
             <aside id="study">
+                <button onclick="this.getRootNode().host.flip(event)">Flip</button>
                 <button onclick="this.getRootNode().host.shuffle(event)">Shuffle Cards</button>
                 <button onclick="this.getRootNode().host.exit(event)">Exit</button>
             </aside>
             <aside id="play">
-                <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
-                <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
+                <button onclick="this.getRootNode().host.flip(event)">Flip</button>
+                <nav>
+                    <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
+                    <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
+                </nav>
                 <button onclick="this.getRootNode().host.exit(event)">Quit</button>
             </aside>
         </section>
@@ -47,11 +52,11 @@ template.innerHTML = `
             <li class="corrects">Correct: <span id="correct"></span></li>
             <li class="wrongs">Wrong: <span id="wrong"></span></li>
             <hr>
-            <li class="score"><b id="high">High Score</b> <span id="score">0%</span></li>
-            <li class="Highest">Highest <span id="highest">0%</span></li>
+            <li class="score"><b id="high">High Score</b> <span id="score"></span></li>
+            <li class="Highest">Highest <span id="highest"></span></li>
         </ul>
         <section>
-            <button id="restart" onclick="this.getRootNode().host.restart(event)">Restart Game</button>
+            <button id="restart" onclick="this.getRootNode().host.restart(event)">Reset Game</button>
             <button id="collect">Collect Coins</button>
         </section>
     </footer>
