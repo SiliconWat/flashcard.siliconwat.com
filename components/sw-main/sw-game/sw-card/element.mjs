@@ -68,6 +68,7 @@ class SwCard extends HTMLElement {
                 break;
             default:
                 this.shadowRoot.getElementById(localStorage.getItem(this.#level)).selected = true;
+                this.shadowRoot.querySelectorAll('.mode').forEach(element => element.disabled = this.#game.length === 0);
                 this.shadowRoot.querySelector('header').style.display = 'block';
         }
     }
@@ -83,21 +84,20 @@ class SwCard extends HTMLElement {
     }
 
     #renderCard() {
+        const cards = this.cards;
         const mode = localStorage.getItem(this.#mode);
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
-        if (this.cards[current]) {
-            this.shadowRoot.getElementById('front').innerHTML = this.cards[current][0];
-            this.shadowRoot.getElementById('back').innerHTML = `<code>${this.cards[current][1]}</code>`;
-        }
-
-        this.shadowRoot.getElementById('total').textContent = this.cards.length;
-        this.shadowRoot.getElementById('current').textContent = this.cards[current] ? current + 1 : 0;
+        this.shadowRoot.getElementById('total').textContent = cards.length;
+        this.shadowRoot.getElementById('current').textContent = cards[current] ? current + 1 : 0;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
-        this.shadowRoot.getElementById('next').style.display = current < this.cards.length - 1 ? 'inline-block' : 'none';
-        this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === this.cards.length - 1) ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === cards.length - 1) ? 'inline-block' : 'none';
+
+        this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][0] : "TBA";
+        this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code>${cards[current][1]}</code>` : "TBA";
 
         this.shadowRoot.getElementById('true').disabled = false;
         this.shadowRoot.getElementById('false').disabled = false;

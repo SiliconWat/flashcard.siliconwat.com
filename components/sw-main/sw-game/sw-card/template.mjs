@@ -9,8 +9,8 @@ template.innerHTML = `
             <option id="mid" value="mid">Mid</option>
             <option id="senior" value="senior">Senior</option>
         </select>
-        <button onclick="this.getRootNode().host.renderMode('study')">Enter Study Mode</button>
-        <button onclick="this.getRootNode().host.renderMode('play')">Enter Play Mode</button>
+        <button class="mode" onclick="this.getRootNode().host.renderMode('study')">Enter Study Mode</button>
+        <button class="mode" onclick="this.getRootNode().host.renderMode('play')">Enter Play Mode</button>
         <p>swipe instructions</p>
     </header>
     <main>
