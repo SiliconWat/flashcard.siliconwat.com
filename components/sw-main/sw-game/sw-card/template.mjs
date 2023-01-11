@@ -41,9 +41,7 @@ template.innerHTML = `
     <footer>
         <section>
             <h4>Reward Summary</h4>
-            <h5>Level Mid</h5>
-            <h5>Time Left/New High 00:00</h5>
-            <h5>Highest 00:00</h5>
+            <h5 id="level">Level Mid</h5>
         </section>
         <ul>
             <li class="corrects">Correct: <span id="correct"></span></li>

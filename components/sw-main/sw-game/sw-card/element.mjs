@@ -3,10 +3,13 @@ import template from './template.mjs';
 class SwCard extends HTMLElement {
     #pointer;
     #game;
+    #timer;
 
+    #cards;
+    #current;
     #level;
     #mode;
-    #timer;
+    #time;
 
     constructor() {
         super();
@@ -15,12 +18,16 @@ class SwCard extends HTMLElement {
     }
 
     render(pointer=this.#pointer, game=this.#game) {
-        this.#pointer = pointer;
         this.#game = game;
-        this.#level = `${this.#pointer.split('-')[0]}-level`;
-        this.#mode = `${this.#pointer.split('-')[0]}-mode`;
         this.shadowRoot.querySelectorAll("header, main, footer").forEach(element => element.style.display = 'none');
         
+        this.#pointer = pointer;
+        this.#cards = `${this.#pointer}-cards`;
+        this.#current = `${this.#pointer}-current`;
+        this.#level = `${this.#pointer}-level`;
+        this.#mode = `${this.#pointer}-mode`;
+        this.#time = `${this.#pointer}-time`;
+
         switch (localStorage.getItem(this.#pointer)) {
             case "finished":
                 this.#renderResult();
@@ -37,6 +44,7 @@ class SwCard extends HTMLElement {
     }
 
     renderMode(mode) {
+        localStorage.setItem(this.#level, localStorage.getItem(this.#level) || 'junior');
         localStorage.setItem(this.#mode, mode);
         this.shadowRoot.querySelectorAll("header, main").forEach(element => element.style.display = 'none');
 
@@ -51,7 +59,7 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelector('main').style.display = 'block';
                 break;
             default:
-                this.shadowRoot.getElementById(localStorage.getItem(this.#level) || "junior").selected = true;
+                this.shadowRoot.getElementById(localStorage.getItem(this.#level)).selected = true;
                 this.shadowRoot.querySelector('header').style.display = 'block';
         }
     }
@@ -60,62 +68,55 @@ class SwCard extends HTMLElement {
         localStorage.setItem(this.#level, event.target.value);
     }
 
-    #renderCard() {
-        const current = Number(localStorage.getItem(`${this.#pointer}-current`));
-        if (localStorage.getItem(this.#mode) === 'study') this.#startTimer();
+    get cards() {
+        const cards = JSON.parse(localStorage.getItem(this.#cards)) || (localStorage.getItem(this.#mode) === 'study' ? this.#game : this.#shuffle([...this.#game, ...this.#shuffle([...this.#game])]));
+        localStorage.setItem(this.#cards, JSON.stringify(cards));
+        return cards;
+    }
 
-        if (this.#game[current]) {
-            this.shadowRoot.getElementById('front').innerHTML = this.#game[current][0];
-            this.shadowRoot.getElementById('back').innerHTML = `<code>${this.#game[current][1]}</code>`;
+    #renderCard() {
+        const mode = localStorage.getItem(this.#mode);
+        const current = Number(localStorage.getItem(this.#current));
+        if (mode === 'study') this.#startTimer();
+
+        if (this.cards[current]) {
+            this.shadowRoot.getElementById('front').innerHTML = this.cards[current][0];
+            this.shadowRoot.getElementById('back').innerHTML = `<code>${this.cards[current][1]}</code>`;
         }
 
-        this.shadowRoot.getElementById('total').textContent = this.#game.length;
-        this.shadowRoot.getElementById('current').textContent = this.#game[current] ? current + 1 : 0;
+        this.shadowRoot.getElementById('total').textContent = this.cards.length;
+        this.shadowRoot.getElementById('current').textContent = this.cards[current] ? current + 1 : 0;
 
         this.shadowRoot.getElementById('previous').style.display = current === 0 ? 'none' : 'inline-block';
-        this.shadowRoot.getElementById('next').style.display = current < this.#game.length - 1 ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('next').style.display = current < this.cards.length - 1 ? 'inline-block' : 'none';
 
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
-        this.shadowRoot.getElementById(localStorage.getItem(this.#mode)).style.display = 'block';
+        this.shadowRoot.getElementById(mode).style.display = 'block';
         this.shadowRoot.querySelector('main').style.display = 'block';
     }
 
-    next(event) {
-        const current = Number(localStorage.getItem(`${this.#pointer}-current`));
-        if (current < this.#game.length - 1) localStorage.setItem(`${this.#pointer}-current`, Number(localStorage.getItem(`${this.#pointer}-current`)) + 1);
-        this.#renderCard();
-    }
-
-    previous(event) {
-        const current = Number(localStorage.getItem(`${this.#pointer}-current`));
-        if (current > 0) localStorage.setItem(`${this.#pointer}-current`, Number(localStorage.getItem(`${this.#pointer}-current`)) - 1);
-        this.#renderCard();
-    }
-
-    shuffle(event) {
-        this.#shuffle(this.#game);
-        this.#renderCard();
-    }
-
-    #shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
+    #setTime() {
+        localStorage.setItem(this.#time, localStorage.getItem(this.#mode) === 'study' ? new Date() : this.#levelTime);
     }
 
     #startTimer() {
         clearInterval(this.#timer);
         const mode = localStorage.getItem(this.#mode);
-        const startTime = mode === 'study' ? new Date() : this.#levelTime;
-        this.shadowRoot.getElementById('timer').textContent = this.#getFormattedDuration((mode === 'study' ? (new Date() - startTime) : (startTime - new Date())) / 1000);
+        if (localStorage.getItem(this.#time) === null) this.#setTime();
+        const time = new Date(localStorage.getItem(this.#time));
+        this.shadowRoot.getElementById('timer').textContent = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
 
         this.#timer = setInterval(mode => {
-            const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - startTime) : (startTime - new Date())) / 1000);
+            const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
             this.shadowRoot.getElementById('timer').textContent = timerDuration;
 
-            if (mode === 'play' && timerDuration === "00 : 00") this.#renderResult();
-
+            if (mode === 'play' && timerDuration <= "00 : 00") {
+                clearInterval(this.#timer);
+                localStorage.removeItem(this.#mode);
+                localStorage.removeItem(this.#current);
+                localStorage.setItem(this.#pointer, 'finished');
+                this.render();
+            }
         }, 1000, mode);
     }
 
@@ -123,11 +124,11 @@ class SwCard extends HTMLElement {
         const date = new Date();
         switch (localStorage.getItem(this.#level)) {
             case "junior":
-                return new Date(date.getTime() + 10*this.#game.length*1000);
+                return new Date(date.getTime() + 10*this.cards.length*1000);
             case "mid":
-                return new Date(date.getTime() + 6*this.#game.length*1000);
+                return new Date(date.getTime() + 6*this.cards.length*1000);
             case "senior":
-                return new Date(date.getTime() + 3*this.#game.length*1000);
+                return new Date(date.getTime() + 3*this.cards.length*1000);
         }
     }
 
@@ -143,12 +144,46 @@ class SwCard extends HTMLElement {
         return h > 0 ? `${hours} : ${minutes} : ${seconds}` : `${minutes} : ${seconds}`;
     }
 
+    next(event) {
+        if (Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) {
+            localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) + 1);
+            if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
+            this.#renderCard();
+        }
+    }
+
+    previous(event) {
+        if (Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) {
+            localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) - 1);
+            if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
+            this.#renderCard();
+        }
+    }
+
+    shuffle(event) {
+        localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
+        this.#renderCard();
+    }
+
+    #shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     exit(event) {
-        localStorage.removeItem(this.#mode);
+        clearInterval(this.#timer);
+        localStorage.removeItem(this.#cards);
+        localStorage.removeItem(this.#time);
+        localStorage.removeItem(this.#current);
         this.renderMode('setting');
     }
 
     #renderResult() {
+        this.shadowRoot.getElementById('level').textContent = `Level ${localStorage.getItem(this.#level).capitalize()}`;
+
         /*let correct = 0, wrong = 0, skipped = 0;
 
         this.#game.forEach(problem => {
@@ -188,12 +223,9 @@ class SwCard extends HTMLElement {
     }
 
     restart(event) {
-        this.#game.forEach(problem => {
-            localStorage.removeItem(`${this.#pointer}-problem${problem.id}-selection`);
-            localStorage.removeItem(`${this.#pointer}-problem${problem.id}-answer`);
-        });
         localStorage.setItem(this.#pointer, 0);
-        localStorage.removeItem(`${this.#pointer}-current`);
+        localStorage.removeItem(this.#cards);
+        localStorage.removeItem(this.#time);
         this.render();
     }
 
