@@ -158,15 +158,11 @@ class SwCard extends HTMLElement {
     }
 
     next(event) {
-        if (Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) {
-            this.#go(1);
-        } 
+        if (Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) this.#go(1);
     }
 
     previous(event) {
-        if (Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) {
-            this.#go(-1);
-        }
+        if (Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) this.#go(-1);
     }
 
     #go(skip) {
