@@ -10,6 +10,7 @@ class SwCard extends HTMLElement {
     #level;
     #mode;
     #time;
+    #count;
 
     constructor() {
         super();
@@ -27,6 +28,7 @@ class SwCard extends HTMLElement {
         this.#level = `${this.#pointer}-level`;
         this.#mode = `${this.#pointer}-mode`;
         this.#time = `${this.#pointer}-time`;
+        this.#count = `${this.#pointer}-count`;
 
         switch (localStorage.getItem(this.#pointer)) {
             case "finished":
@@ -69,7 +71,7 @@ class SwCard extends HTMLElement {
     }
 
     get cards() {
-        const cards = JSON.parse(localStorage.getItem(this.#cards)) || (localStorage.getItem(this.#mode) === 'study' ? this.#game : this.#shuffle([...this.#game, ...this.#shuffle([...this.#game])]));
+        const cards = JSON.parse(localStorage.getItem(this.#cards)) || (localStorage.getItem(this.#mode) === 'study' ? this.#game : this.#shuffle([...this.#game, ...this.#shuffle2([...this.#game])]));
         localStorage.setItem(this.#cards, JSON.stringify(cards));
         return cards;
     }
@@ -109,14 +111,7 @@ class SwCard extends HTMLElement {
         this.#timer = setInterval(mode => {
             const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
             this.shadowRoot.getElementById('timer').textContent = timerDuration;
-
-            if (mode === 'play' && timerDuration <= "00 : 00") {
-                clearInterval(this.#timer);
-                localStorage.removeItem(this.#mode);
-                localStorage.removeItem(this.#current);
-                localStorage.setItem(this.#pointer, 'finished');
-                this.render();
-            }
+            if (mode === 'play' && timerDuration <= "00 : 00") this.#finish();
         }, 1000, mode);
     }
 
@@ -147,17 +142,42 @@ class SwCard extends HTMLElement {
     next(event) {
         if (Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) {
             localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) + 1);
-            if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
-            this.#renderCard();
-        }
+            this.#go();
+        } 
     }
 
     previous(event) {
         if (Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) {
             localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) - 1);
-            if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
-            this.#renderCard();
+            this.#go();
         }
+    }
+
+    #go() {
+        if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
+        this.shadowRoot.getElementById('true').textContent = "True";
+        this.shadowRoot.getElementById('false').textContent = "False";
+        this.#renderCard();
+    }
+
+    submit(event) {
+        const current = Number(localStorage.getItem(this.#current));
+        const choice = event.target.id === 'true';
+        const answer = this.#game.some(card => card[0] === this.cards[current][0] && card[1] === this.cards[current][1]);
+
+        if (choice === answer) {
+            event.target.textContent = "Correct";
+        } else {
+            event.target.textContent = "Wrong";
+        }
+    }
+
+    #finish() {
+        clearInterval(this.#timer);
+        localStorage.removeItem(this.#mode);
+        localStorage.removeItem(this.#current);
+        localStorage.setItem(this.#pointer, 'finished');
+        this.render();
     }
 
     shuffle(event) {
@@ -169,6 +189,14 @@ class SwCard extends HTMLElement {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    #shuffle2(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i][1], array[j][1]] = [array[j][1], array[i][1]];
         }
         return array;
     }
