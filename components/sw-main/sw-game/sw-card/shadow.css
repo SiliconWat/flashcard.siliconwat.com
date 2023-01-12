@@ -21,7 +21,7 @@ main {
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: violet;
+    color: white;
     margin: 50px auto;
 }
 
@@ -81,11 +81,30 @@ main p {
 }
 
 h1 {
-
+    font-size: xx-large;
+    color: whitesmoke;
+    border: double white 5px;
+    padding: 5px 10px;
+    width: fit-content;
+    margin: auto;
+    border-radius: 10px;
 }
 
 aside {
     margin: 20px;
+}
+
+button {
+    color: white;
+    box-shadow: inset 0 1px 1px rgba(111, 55, 125, 0.8), inset 0 -1px 0px rgba(63, 59, 113, 0.2), 0 9px 16px 0 rgba(0, 0, 0, 0.3), 0 4px 3px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px #150a1e;
+    background-image: linear-gradient(#632c65, #3b2751);
+    text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+button:disabled {
+    opacity: 0.5;
 }
 
 #study, #play {

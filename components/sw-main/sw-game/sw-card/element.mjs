@@ -100,12 +100,14 @@ class SwCard extends HTMLElement {
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
-        this.shadowRoot.getElementById('total').textContent = `( ${cards.length} Total )`;
+        this.shadowRoot.getElementById('total').innerHTML = `( <strong>${cards.length}</strong> Total )`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
         this.shadowRoot.getElementById('current2').textContent = this.shadowRoot.getElementById('current').textContent;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('flip').style.display = (mode === 'play' && current === cards.length - 1) ? 'none' : 'inline-block';
+        this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current != cards.length - 1) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === cards.length - 1) ? 'inline-block' : 'none';
 
         this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][0] : "TBA";
@@ -115,6 +117,9 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('false').disabled = false;
         this.shadowRoot.getElementById('true').textContent = "True";
         this.shadowRoot.getElementById('false').textContent = "False";
+
+        this.shadowRoot.getElementById('front').parentElement.classList.remove('flipped');
+        this.shadowRoot.getElementById('back').parentElement.classList.remove('flipped');
         
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
         this.shadowRoot.getElementById(mode).style.display = 'block';
@@ -179,6 +184,7 @@ class SwCard extends HTMLElement {
     }
 
     #go(skip) {
+        this.shadowRoot.querySelector('.flashcard').animate([{ transform: "translateX(0%)", opacity: 1 }, { transform: `translateX(${-100*skip}%)`, opacity: 0 }, { transform: "translateX(0%)", opacity: 1 }], { duration: 500, iterations: 1 });
         if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
         localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) + skip);
         this.#renderCard();

@@ -18,7 +18,9 @@ template.innerHTML = `
             <h1 id="timer"></h1>
             <aside>
                 <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
+                <button id="flip" onclick="this.getRootNode().host.flip(event)">Flip</button>
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
+                <button id="quit" onclick="this.getRootNode().host.exit(event)">Quit</button>
                 <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
         </section>
@@ -34,19 +36,14 @@ template.innerHTML = `
         </section>
         <section>
             <aside id="study">
-                <button onclick="this.getRootNode().host.flip(event)">Flip</button>
                 <button onclick="this.getRootNode().host.shuffle(event)">Shuffle Cards</button>
                 <button onclick="this.getRootNode().host.exit(event)">Exit</button>
             </aside>
             <aside id="play">
-                <button onclick="this.getRootNode().host.flip(event)">Flip</button>
-                <nav>
-                    <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
-                    <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
-                </nav>
-                <button onclick="this.getRootNode().host.exit(event)">Quit</button>
+                <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
+                <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
             </aside>
-            <span id="total"></span>
+            <small id="total"></small>
         </section>
     </main>
     <footer>
