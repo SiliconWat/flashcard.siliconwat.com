@@ -120,6 +120,7 @@ class SwCard extends HTMLElement {
 
         this.shadowRoot.getElementById('front').parentElement.classList.remove('flipped');
         this.shadowRoot.getElementById('back').parentElement.classList.remove('flipped');
+        this.shadowRoot.getElementById('timer').style.color = 'white';
         
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
         this.shadowRoot.getElementById(mode).style.display = 'block';
@@ -127,7 +128,7 @@ class SwCard extends HTMLElement {
     }
 
     #setTime() {
-        localStorage.setItem(this.#time, localStorage.getItem(this.#mode) === 'study' ? new Date() : this.#levelTime);
+        localStorage.setItem(this.#time, localStorage.getItem(this.#mode) === 'study' ? new Date() : this.#levelStartTime);
     }
 
     #startTimer() {
@@ -136,26 +137,31 @@ class SwCard extends HTMLElement {
         if (localStorage.getItem(this.#time) === null) this.#setTime();
         const time = new Date(localStorage.getItem(this.#time));
         this.shadowRoot.getElementById('timer').textContent = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
+        const levelDuration = this.#getFormattedDuration((this.#levelStopTime - new Date()) / 1000);
 
         this.#timer = setInterval(mode => {
+            const timer = this.shadowRoot.getElementById('timer')
             const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
-            this.shadowRoot.getElementById('timer').textContent = timerDuration;
+            timer.textContent = timerDuration;
+            if (mode === 'study' && timerDuration > levelDuration) timer.style.color = 'red';
             if (mode === 'play' && timerDuration <= "00 : 00") this.finish();
         }, 1000, mode);
     }
 
-    get #levelTime() {
+    #levels = {
+        junior: 9,
+        mid: 6,
+        senior: 3
+    }
+
+    get #levelStartTime() {
         const date = new Date();
-        const cards = this.cards;
-        
-        switch (localStorage.getItem(this.#level)) {
-            case "junior":
-                return new Date(date.getTime() + 9*cards.length*1000);
-            case "mid":
-                return new Date(date.getTime() + 6*cards.length*1000);
-            case "senior":
-                return new Date(date.getTime() + 3*cards.length*1000);
-        }
+        return new Date(date.getTime() + this.#levels[localStorage.getItem(this.#level)]*this.cards.length*1000);
+    }
+
+    get #levelStopTime() {
+        const date = new Date();
+        return new Date(date.getTime() + this.#levels[localStorage.getItem(this.#level)]*1000);
     }
 
     #getFormattedDuration(totalSeconds) {
