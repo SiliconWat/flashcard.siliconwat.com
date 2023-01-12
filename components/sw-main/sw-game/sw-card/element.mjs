@@ -83,14 +83,25 @@ class SwCard extends HTMLElement {
         return cards;
     }
 
+    #convertToRoman(num) {
+        const roman = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1};
+        let str = '';
+        for (let i of Object.keys(roman)) {
+            const q = Math.floor(num / roman[i]);
+            num -= q * roman[i];
+            str += i.repeat(q);
+        }
+        return str;
+      }
+
     #renderCard() {
         const cards = this.cards;
         const mode = localStorage.getItem(this.#mode);
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
-        this.shadowRoot.getElementById('total').textContent = cards.length;
-        this.shadowRoot.getElementById('current').textContent = cards[current] ? current + 1 : 0;
+        this.shadowRoot.getElementById('total').textContent = `( ${cards.length} Total )`;
+        this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
@@ -154,8 +165,8 @@ class SwCard extends HTMLElement {
     }
 
     flip(event) {
-        this.shadowRoot.getElementById('front').classList.toggle('flipped');
-        this.shadowRoot.getElementById('back').classList.toggle('flipped');
+        this.shadowRoot.getElementById('front').parentElement.classList.toggle('flipped');
+        this.shadowRoot.getElementById('back').parentElement.classList.toggle('flipped');
     }
 
     next(event) {

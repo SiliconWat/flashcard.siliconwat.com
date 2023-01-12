@@ -15,17 +15,23 @@ template.innerHTML = `
     </header>
     <main>
         <section>
-            <h4>Card <span id="current"></span> of <span id="total"></span></h4>
-            <h5 id="timer"></h5>
+            <h1 id="timer"></h1>
             <aside>
                 <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
                 <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
+            <span id="total"></span>
         </section>
         <section class="flashcard">
-            <div id="front" class="card front"></div>
-            <div id="back" class="card back"></div>
+            <div class="card front">
+                <h2 id="current"></h2>
+                <p id="front"></p>
+                <p></p>
+            </div>
+            <div class="card back">
+                <p id="back"></p>
+            </div>
         </section>
         <section>
             <aside id="study">
@@ -49,8 +55,8 @@ template.innerHTML = `
             <h5 id="level">Level Mid</h5>
         </section>
         <ul>
-            <li class="corrects">Correct: <span id="correct"></span></li>
-            <li class="wrongs">Wrong: <span id="wrong"></span></li>
+            <li class="correct">Correct: <span id="correct"></span></li>
+            <li class="wrong">Wrong: <span id="wrong"></span></li>
             <hr>
             <li class="score"><b id="high">High Score</b> <span id="score"></span></li>
             <li class="Highest">Highest <span id="highest"></span></li>
