@@ -47,6 +47,12 @@ footer {
     box-sizing: border-box;
     color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 3;
+    font-size: larger;
 }
 
 .card.front {
