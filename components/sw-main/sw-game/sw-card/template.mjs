@@ -23,9 +23,9 @@ template.innerHTML = `
                 <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
         </section>
-        <section>
-            <div id="front"></div>
-            <div id="back"></div>
+        <section class="flashcard">
+            <div id="front" class="card front"></div>
+            <div id="back" class="card back"></div>
         </section>
         <section>
             <aside id="study">

@@ -57,14 +57,14 @@ class SwCard extends HTMLElement {
         switch (localStorage.getItem(this.#mode)) {
             case "study":
                 this.#renderCard();
-                this.shadowRoot.querySelector('main').style.display = 'block';
+                this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
             case "play":
                 localStorage.setItem(this.#correct, localStorage.getItem(this.#correct) || 0);
                 localStorage.setItem(this.#wrong, localStorage.getItem(this.#wrong) || 0);
                 this.#startTimer()
                 this.#renderCard();
-                this.shadowRoot.querySelector('main').style.display = 'block';
+                this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
             default:
                 this.shadowRoot.getElementById(localStorage.getItem(this.#level)).selected = true;
@@ -106,7 +106,7 @@ class SwCard extends HTMLElement {
         
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
         this.shadowRoot.getElementById(mode).style.display = 'block';
-        this.shadowRoot.querySelector('main').style.display = 'block';
+        this.shadowRoot.querySelector('main').style.display = 'flex';
     }
 
     #setTime() {
@@ -154,7 +154,8 @@ class SwCard extends HTMLElement {
     }
 
     flip(event) {
-        
+        this.shadowRoot.getElementById('front').classList.toggle('flipped');
+        this.shadowRoot.getElementById('back').classList.toggle('flipped');
     }
 
     next(event) {
