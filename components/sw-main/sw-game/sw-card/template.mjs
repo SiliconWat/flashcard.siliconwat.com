@@ -21,13 +21,12 @@ template.innerHTML = `
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
                 <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
-            <span id="total"></span>
         </section>
         <section class="flashcard">
             <div class="card front">
                 <h2 id="current"></h2>
                 <p id="front"></p>
-                <p></p>
+                <h2 id="current2"></h2>
             </div>
             <div class="card back">
                 <p id="back"></p>
@@ -47,6 +46,7 @@ template.innerHTML = `
                 </nav>
                 <button onclick="this.getRootNode().host.exit(event)">Quit</button>
             </aside>
+            <span id="total"></span>
         </section>
     </main>
     <footer>

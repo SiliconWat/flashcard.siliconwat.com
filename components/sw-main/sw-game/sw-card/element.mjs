@@ -102,6 +102,7 @@ class SwCard extends HTMLElement {
 
         this.shadowRoot.getElementById('total').textContent = `( ${cards.length} Total )`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
+        this.shadowRoot.getElementById('current2').textContent = this.shadowRoot.getElementById('current').textContent;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
@@ -211,6 +212,7 @@ class SwCard extends HTMLElement {
     }
 
     shuffle(event) {
+        this.shadowRoot.querySelector('.flashcard').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
         localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
         this.#renderCard();
     }
