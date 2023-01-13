@@ -29,12 +29,14 @@ footer {
 
 }
 
-.flashcard {
+#card {
     position: relative;
     perspective: 1200px;
     min-width: 350px;
     min-height: 550px;
     transform-style: preserve-3d;
+    cursor: grab;
+    transform: translate(calc(var(--x, 0)*10%), calc(var(--y, 0)*10%));
 }
 
 .card {

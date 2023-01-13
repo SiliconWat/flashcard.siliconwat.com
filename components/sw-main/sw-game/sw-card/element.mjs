@@ -1,3 +1,4 @@
+import * as swipeProperties from './swipe.mjs';
 import template from './template.mjs';
 
 class SwCard extends HTMLElement {
@@ -18,6 +19,10 @@ class SwCard extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
+    }
+
+    connectedCallback() {
+        this.attachSwipeGestures('card');
     }
 
     render(pointer=this.#pointer, game=this.#game) {
@@ -107,7 +112,7 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('flip').style.display = (mode === 'play' && current === cards.length - 1) ? 'none' : 'inline-block';
-        this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current != cards.length - 1) ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current !== cards.length - 1) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === cards.length - 1) ? 'inline-block' : 'none';
 
         this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][0] : "TBA";
@@ -190,10 +195,18 @@ class SwCard extends HTMLElement {
     }
 
     #go(skip) {
-        this.shadowRoot.querySelector('.flashcard').animate([{ transform: "translateX(0%)", opacity: 1 }, { transform: `translateX(${-100*skip}%)`, opacity: 0 }, { transform: "translateX(0%)", opacity: 1 }], { duration: 500, iterations: 1 });
+        this.shadowRoot.getElementById('card').animate([{ transform: "translateX(0%)", opacity: 1 }, { transform: `translateX(${-100*skip}%)`, opacity: 0 }, { transform: "translateX(0%)", opacity: 1 }], { duration: 500, iterations: 1 });
         if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
         localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) + skip);
         this.#renderCard();
+    }
+
+    swipeLeft() {
+        this.next();
+    }
+
+    swipeRight() {
+        this.previous();
     }
 
     submit(event) {
@@ -224,7 +237,7 @@ class SwCard extends HTMLElement {
     }
 
     shuffle(event) {
-        this.shadowRoot.querySelector('.flashcard').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
+        this.shadowRoot.getElementById('card').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
         localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
         this.#renderCard();
     }
@@ -301,4 +314,5 @@ class SwCard extends HTMLElement {
     }
 }
 
+Object.assign(SwCard.prototype, swipeProperties);
 customElements.define("sw-card", SwCard);
