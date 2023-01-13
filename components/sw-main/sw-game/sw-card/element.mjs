@@ -215,10 +215,12 @@ class SwCard extends HTMLElement {
 
             if (choice === answer) {
                 localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
-                if (typeof event === 'object') event.target.textContent = "Correct";
+                if (typeof event === 'object') event.target.textContent = "Correct"
+                else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👍🏼");
             } else {
                 localStorage.setItem(this.#wrong, Number(localStorage.getItem(this.#wrong)) + 1);
-                if (typeof event === 'object') event.target.textContent = "Wrong";
+                if (typeof event === 'object') event.target.textContent = "Wrong"
+                else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👎🏼");
             }
 
             this.shadowRoot.getElementById('true').disabled = true;
