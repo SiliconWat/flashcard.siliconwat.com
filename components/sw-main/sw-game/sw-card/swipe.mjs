@@ -27,10 +27,12 @@ function move(e, element) {
             if (dx > 0) element.dispatchEvent(new Event('swipeRight'));
             if (dx < 0) element.dispatchEvent(new Event('swipeLeft'));
             x = null;
-        } else {
+        } else if ((Math.abs(dx) < Math.abs(dy))) {
             if (dy > 0) element.dispatchEvent(new Event('swipeDown'));
             if (dy < 0) element.dispatchEvent(new Event('swipeUp'));
             y = null;
+        } else {
+            element.dispatchEvent(new Event('swipeNone'));
         }
     }
 }
