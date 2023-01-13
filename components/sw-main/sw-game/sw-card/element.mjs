@@ -1,4 +1,4 @@
-import * as swipeProperties from './swipe.mjs';
+import { attachSwipeGestures } from './swipe.mjs';
 import template from './template.mjs';
 
 class SwCard extends HTMLElement {
@@ -22,7 +22,12 @@ class SwCard extends HTMLElement {
     }
 
     connectedCallback() {
-        this.attachSwipeGestures('card');
+        const card = this.shadowRoot.getElementById('card');
+        card.addEventListener('swipeLeft', e => this.next(e));
+        card.addEventListener('swipeRight', e => this.previous(e));
+        card.addEventListener('swipeUp', e => this.submit(true));
+        card.addEventListener('swipeDown', e => this.submit(false));
+        attachSwipeGestures(card);
     }
 
     render(pointer=this.#pointer, game=this.#game) {
@@ -110,7 +115,7 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('current2').textContent = this.shadowRoot.getElementById('current').textContent;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
-        this.shadowRoot.getElementById('next').style.display = current < cards.length - 1 ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('next').style.display = (mode === 'study' && current < cards.length - 1) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('flip').style.display = (mode === 'play' && current === cards.length - 1) ? 'none' : 'inline-block';
         this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current !== cards.length - 1) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === cards.length - 1) ? 'inline-block' : 'none';
@@ -187,11 +192,11 @@ class SwCard extends HTMLElement {
     }
 
     next(event) {
-        if (Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) this.#go(1);
+        if (localStorage.getItem(this.#mode) === 'study' && Number(localStorage.getItem(`${this.#pointer}-current`)) < this.cards.length - 1) this.#go(1);
     }
 
     previous(event) {
-        if (Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) this.#go(-1);
+        if (localStorage.getItem(this.#mode) === 'study' && Number(localStorage.getItem(`${this.#pointer}-current`)) > 0) this.#go(-1);
     }
 
     #go(skip) {
@@ -201,30 +206,24 @@ class SwCard extends HTMLElement {
         this.#renderCard();
     }
 
-    swipeLeft() {
-        this.next();
-    }
-
-    swipeRight() {
-        this.previous();
-    }
-
     submit(event) {
-        const cards = this.cards;
-        const current = Number(localStorage.getItem(this.#current));
-        const choice = event.target.id === 'true';
-        const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1]);
+        if (localStorage.getItem(this.#mode) === 'play') {
+            const cards = this.cards;
+            const current = Number(localStorage.getItem(this.#current));
+            const choice = typeof event === 'boolean' ? event : event.target.id === 'true';
+            const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1]);
 
-        if (choice === answer) {
-            localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
-            event.target.textContent = "Correct";
-        } else {
-            localStorage.setItem(this.#wrong, Number(localStorage.getItem(this.#wrong)) + 1);
-            event.target.textContent = "Wrong";
+            if (choice === answer) {
+                localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
+                if (typeof event === 'object') event.target.textContent = "Correct";
+            } else {
+                localStorage.setItem(this.#wrong, Number(localStorage.getItem(this.#wrong)) + 1);
+                if (typeof event === 'object') event.target.textContent = "Wrong";
+            }
+
+            this.shadowRoot.getElementById('true').disabled = true;
+            this.shadowRoot.getElementById('false').disabled = true;
         }
-
-        this.shadowRoot.getElementById('true').disabled = true;
-        this.shadowRoot.getElementById('false').disabled = true;
     }
 
     finish() {
@@ -314,5 +313,4 @@ class SwCard extends HTMLElement {
     }
 }
 
-Object.assign(SwCard.prototype, swipeProperties);
 customElements.define("sw-card", SwCard);

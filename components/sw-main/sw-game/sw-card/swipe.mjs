@@ -1,12 +1,11 @@
-export function attachSwipeGestures(id) {
-    const element = this.shadowRoot.getElementById(id);
+export function attachSwipeGestures(element) {
     element.addEventListener('touchmove', e => e.preventDefault(), false);
 
     element.addEventListener('mousedown', lock, false);
     element.addEventListener('touchstart', lock, false);
     
-    element.addEventListener('mouseup', move, false);
-    element.addEventListener('touchend', move, false);
+    element.addEventListener('mouseup', e => move(e, element), false);
+    element.addEventListener('touchend', e => move(e, element), false);
 }
 
 function swipe(e) { 
@@ -19,29 +18,21 @@ function lock(e) {
     y = swipe(e).clientY;
 }
 
-function move(e) {
+function move(e, element) {
     if (x !== null && y !== null) {
         const dx = swipe(e).clientX - x;
         const dy = swipe(e).clientY - y;
 
         if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) swipeRight(dx);
-            if (dx < 0) swipeLeft(dx);
+            if (dx > 0) element.dispatchEvent(new Event('swipeRight'));
+            if (dx < 0) element.dispatchEvent(new Event('swipeLeft'));
             x = null;
         } else {
-            if (dy > 0) swipeDown(dy);
-            if (dy < 0) swipeUp(dy);
+            if (dy > 0) element.dispatchEvent(new Event('swipeDown'));
+            if (dy < 0) element.dispatchEvent(new Event('swipeUp'));
             y = null;
         }
     }
-}
-
-function swipeLeft() {
-
-}
-
-function swipeRight() {
-
 }
 
 // possible to set css var!
