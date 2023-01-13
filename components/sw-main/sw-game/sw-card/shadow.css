@@ -109,8 +109,35 @@ button:disabled {
     opacity: 0.5;
 }
 
+#scoreboard {
+    margin-right: 20px;
+}
+
+#total {
+    color: whitesmoke;
+}
+
+.correct {
+    margin-right: 5px;
+    color: green;
+}
+
+.wrong {
+    margin-left: 5px;
+    color: red;
+}
+
 #study, #play {
     display: none;
+}
+
+figure {
+    display: inline-block;
+}
+
+#sound, #mute {
+    display: none;
+    cursor: pointer;
 }
 
 #current2 {

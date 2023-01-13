@@ -12,6 +12,8 @@ class SwCard extends HTMLElement {
     #mode;
     #time;
 
+    #sound;
+    #submitted;
     #correct;
     #wrong;
 
@@ -41,6 +43,8 @@ class SwCard extends HTMLElement {
         this.#mode = `${this.#pointer}-mode`;
         this.#time = `${this.#pointer}-time`;
 
+        this.#sound = `${this.#pointer}-sound`;
+        this.#submitted = `${this.#pointer}-submitted`;
         this.#correct = `${this.#pointer}-correct`;
         this.#wrong = `${this.#pointer}-wrong`;
 
@@ -70,9 +74,10 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
             case "play":
+                localStorage.setItem(this.#sound, localStorage.getItem(this.#sound) || 1);
                 localStorage.setItem(this.#correct, localStorage.getItem(this.#correct) || 0);
                 localStorage.setItem(this.#wrong, localStorage.getItem(this.#wrong) || 0);
-                this.#startTimer()
+                this.#startTimer();
                 this.#renderCard();
                 this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
@@ -106,19 +111,20 @@ class SwCard extends HTMLElement {
 
     #renderCard() {
         const cards = this.cards;
+        const sound = Number(localStorage.getItem(this.#sound));
         const mode = localStorage.getItem(this.#mode);
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
         this.shadowRoot.getElementById('total').innerHTML = `( <strong>${cards.length}</strong> Total )`;
+        this.shadowRoot.getElementById('scoreboard').innerHTML = `<strong class="correct">${localStorage.getItem(this.#correct)} 👍🏼</strong><strong class="wrong">${localStorage.getItem(this.#wrong)} 👎🏼</strong>`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
         this.shadowRoot.getElementById('current2').textContent = this.shadowRoot.getElementById('current').textContent;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = (mode === 'study' && current < cards.length - 1) ? 'inline-block' : 'none';
-        this.shadowRoot.getElementById('flip').style.display = (mode === 'play' && current === cards.length - 1) ? 'none' : 'inline-block';
-        this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current !== cards.length - 1) ? 'inline-block' : 'none';
-        this.shadowRoot.getElementById('finish').style.display = (mode === 'play' && current === cards.length - 1) ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('flip').style.display = (current < cards.length) ? 'inline-block' : 'none';
+        this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current < cards.length) ? 'inline-block' : 'none';
 
         this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][0] : "TBA";
         this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code>${cards[current][1]}</code>` : "TBA";
@@ -133,8 +139,16 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('timer').style.color = 'white';
         
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
+        this.shadowRoot.getElementById('sound').style.display = sound ? 'none' : 'block';
+        this.shadowRoot.getElementById('mute').style.display = sound ? 'block' : 'none';
         this.shadowRoot.getElementById(mode).style.display = 'block';
         this.shadowRoot.querySelector('main').style.display = 'flex';
+    }
+
+    volume(event) {
+        localStorage.setItem(this.#sound, Number(event.target.id === 'sound'));
+        this.shadowRoot.getElementById(event.target.id).style.display = 'none';
+        this.shadowRoot.getElementById(event.target.id === 'sound' ? 'mute': 'sound').style.display = 'block';
     }
 
     #setTime() {
@@ -150,12 +164,19 @@ class SwCard extends HTMLElement {
         const levelDuration = this.#getFormattedDuration((this.#levelStopTime - new Date()) / 1000);
 
         this.#timer = setInterval(mode => {
-            const timer = this.shadowRoot.getElementById('timer')
             const timerDuration = this.#getFormattedDuration((mode === 'study' ? (new Date() - time) : (time - new Date())) / 1000);
-            timer.textContent = timerDuration;
-            if (mode === 'study' && timerDuration > levelDuration) timer.style.color = 'red';
+            this.shadowRoot.getElementById('timer').textContent = timerDuration;
+            if (mode === 'study' && timerDuration >= levelDuration) this.#alert(timerDuration === levelDuration);
             if (mode === 'play' && timerDuration <= "00 : 00") this.finish();
         }, 1000, mode);
+    }
+
+    #alert(play) {
+        this.shadowRoot.getElementById('timer').style.color = 'red';
+        if (play && Number(localStorage.getItem(this.#sound))) {
+            const alert = new Audio("sounds/alert.mp3");
+            alert.play();
+        }
     }
 
     #levels = {
@@ -202,39 +223,38 @@ class SwCard extends HTMLElement {
     #go(skip) {
         this.shadowRoot.getElementById('card').animate([{ transform: "translateX(0%)", opacity: 1 }, { transform: `translateX(${-100*skip}%)`, opacity: 0 }, { transform: "translateX(0%)", opacity: 1 }], { duration: 500, iterations: 1 });
         if (localStorage.getItem(this.#mode) === 'study') this.#setTime();
+        if (localStorage.getItem(this.#mode) === 'play') localStorage.setItem(this.#submitted, 0);
         localStorage.setItem(this.#current, Number(localStorage.getItem(this.#current)) + skip);
         this.#renderCard();
     }
 
     submit(event) {
-        if (localStorage.getItem(this.#mode) === 'play') {
+        if (localStorage.getItem(this.#mode) === 'play' && !Number(localStorage.getItem(this.#submitted))) {
+            let alert;
             const cards = this.cards;
             const current = Number(localStorage.getItem(this.#current));
             const choice = typeof event === 'boolean' ? event : event.target.id === 'true';
             const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1]);
-
+            
             if (choice === answer) {
+                alert = new Audio("sounds/correct.mp3");
                 localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
                 if (typeof event === 'object') event.target.textContent = "Correct"
                 else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👍🏼");
             } else {
+                alert = new Audio("sounds/wrong.mp3");
                 localStorage.setItem(this.#wrong, Number(localStorage.getItem(this.#wrong)) + 1);
                 if (typeof event === 'object') event.target.textContent = "Wrong"
                 else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👎🏼");
             }
 
+            localStorage.setItem(this.#submitted, 1);
             this.shadowRoot.getElementById('true').disabled = true;
             this.shadowRoot.getElementById('false').disabled = true;
+            if (Number(localStorage.getItem(this.#sound))) alert.play();
+            if (Number(localStorage.getItem(`${this.#pointer}-current`)) === this.cards.length - 1) this.finish()
+            else this.#go(1);
         }
-    }
-
-    finish() {
-        clearInterval(this.#timer);
-        localStorage.removeItem(this.#time);
-        localStorage.removeItem(this.#mode);
-        localStorage.removeItem(this.#current);
-        localStorage.setItem(this.#pointer, 'finished');
-        this.render();
     }
 
     shuffle(event) {
@@ -267,7 +287,20 @@ class SwCard extends HTMLElement {
         localStorage.removeItem(this.#current);
         localStorage.removeItem(this.#correct);
         localStorage.removeItem(this.#wrong);
+        localStorage.removeItem(this.#submitted);
         this.renderMode('setting');
+    }
+
+    finish() {
+        const alert = new Audio("sounds/clap.mp3");
+        if (Number(localStorage.getItem(this.#sound))) alert.play();
+        clearInterval(this.#timer);
+        localStorage.removeItem(this.#time);
+        localStorage.removeItem(this.#mode);
+        localStorage.removeItem(this.#current);
+        localStorage.removeItem(this.#submitted);
+        localStorage.setItem(this.#pointer, 'finished');
+        this.render();
     }
 
     #renderResult() {    

@@ -15,13 +15,16 @@ template.innerHTML = `
     </header>
     <main>
         <section>
+            <figure>
+                <img id="sound" onclick="this.getRootNode().host.volume(event)" src="sounds/sound.svg">
+                <img id="mute" onclick="this.getRootNode().host.volume(event)" src="sounds/mute.svg">
+            </figure>
             <h1 id="timer"></h1>
             <aside>
                 <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
                 <button id="flip" onclick="this.getRootNode().host.flip(event)">Flip</button>
                 <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
                 <button id="quit" onclick="this.getRootNode().host.exit(event)">Quit</button>
-                <button id="finish" onclick="this.getRootNode().host.finish()">Finish</button>
             </aside>
         </section>
         <section id="card">
@@ -42,8 +45,10 @@ template.innerHTML = `
             <aside id="play">
                 <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
                 <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
+                <br><br>
+                <small id="scoreboard"></small>
+                <small id="total"></small>
             </aside>
-            <small id="total"></small>
         </section>
     </main>
     <footer>
