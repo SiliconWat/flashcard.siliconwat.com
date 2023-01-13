@@ -25,7 +25,7 @@ class SwCard extends HTMLElement {
 
     connectedCallback() {
         const card = this.shadowRoot.getElementById('card');
-        card.addEventListener('swipeNone', e => this.flip(e));
+        card.addEventListener('swipeNone', this.flip.bind(this));
         card.addEventListener('swipeLeft', e => this.next(e));
         card.addEventListener('swipeRight', e => this.previous(e));
         card.addEventListener('swipeUp', e => this.submit(true));

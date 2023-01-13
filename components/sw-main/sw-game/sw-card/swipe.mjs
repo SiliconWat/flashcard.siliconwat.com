@@ -1,11 +1,11 @@
 export function attachSwipeGestures(element) {
-    element.addEventListener('touchmove', e => e.preventDefault(), false);
+    element.addEventListener('touchmove', e => e.preventDefault());
 
-    element.addEventListener('mousedown', lock, false);
-    element.addEventListener('touchstart', lock, false);
+    element.addEventListener('mousedown', lock);
+    element.addEventListener('touchstart', lock);
     
-    element.addEventListener('mouseup', e => move(e, element), false);
-    element.addEventListener('touchend', e => move(e, element), false);
+    element.addEventListener('mouseup', e => move(e, element));
+    element.addEventListener('touchend', e => move(e, element));
 }
 
 function swipe(e) { 
