@@ -33,6 +33,8 @@ function move(e, element) {
             y = null;
         } else {
             element.dispatchEvent(new Event('swipeNone'));
+            x = null;
+            y = null;
         }
     }
 }

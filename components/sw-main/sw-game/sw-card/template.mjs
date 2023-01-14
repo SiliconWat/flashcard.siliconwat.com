@@ -2,16 +2,33 @@ const template = document.createElement("template");
 
 template.innerHTML = `
     <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/shadow.css">
+    <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/fireworks.css">
     <header>
-        <label>Game Level</label>
         <select onchange="this.getRootNode().host.level(event)">
-            <option id="junior" value="junior">Junior</option>
-            <option id="mid" value="mid">Mid</option>
-            <option id="senior" value="senior">Senior</option>
+            <option id="junior" value="junior">Game Level: Junior</option>
+            <option id="mid" value="mid">Game Level: Mid</option>
+            <option id="senior" value="senior">Game Level: Senior</option>
         </select>
-        <button class="mode" onclick="this.getRootNode().host.renderMode('study')">Enter Study Mode</button>
-        <button class="mode" onclick="this.getRootNode().host.renderMode('play')">Enter Play Mode</button>
-        <p>swipe instructions</p>
+        <section>
+            <h3>Game Levels</h3>
+            <ol>
+                <li><strong>Junior</strong> Level: You get <em><strong>9</strong> seconds</em> per card.</li>
+                <li><strong>Mid</strong> Level: You get <em><strong>6</strong> seconds</em> per card.</li>
+                <li><strong>Senior</strong> Level: You get <em><strong>3</strong> seconds</em> per card.</li>
+            </ol>
+            <h3>Swipe Gestures</h3>
+            <ol>
+                <li><strong>Click</strong> on the flashcard to <em>flip</em> it over.</li>
+                <li><strong>Swipe Left</strong> on the flashcard to go to the <em>next</em> card.</li>
+                <li><strong>Swipe Right</strong> on the flashcard to go to the <em>previous</em> card.</li>
+                <li><strong>Swipe Up</strong> on the flashcard for <em>True</em>.</li>
+                <li><strong>Swipe Down</strong> on the flashcard for <em>False</em>.</li>
+            </ol>
+        </section>
+        <section>
+            <button class="mode" onclick="this.getRootNode().host.renderMode('study')">Enter <strong>Study Mode</strong></button>
+            <button class="mode" onclick="this.getRootNode().host.renderMode('play')">Enter <strong>Play Mode</strong></button>
+        </section>
     </header>
     <main>
         <section>
@@ -21,9 +38,9 @@ template.innerHTML = `
             </figure>
             <h1 id="timer"></h1>
             <aside>
-                <button id="previous" onclick="this.getRootNode().host.previous(event)">Previous Card</button>
+                <button id="previous" onclick="this.getRootNode().host.previous(event)"><strong>Previous</strong> Card</button>
                 <button id="flip" onclick="this.getRootNode().host.flip(event)">Flip</button>
-                <button id="next" onclick="this.getRootNode().host.next(event)">Next Card</button>
+                <button id="next" onclick="this.getRootNode().host.next(event)"><strong>Next</strong> Card</button>
                 <button id="quit" onclick="this.getRootNode().host.exit(event)">Quit</button>
             </aside>
         </section>
@@ -39,12 +56,12 @@ template.innerHTML = `
         </section>
         <section>
             <aside id="study">
-                <button onclick="this.getRootNode().host.shuffle(event)">Shuffle Cards</button>
+                <button onclick="this.getRootNode().host.shuffle(event)"><strong>Shuffle</strong> Cards</button>
                 <button onclick="this.getRootNode().host.exit(event)">Exit</button>
             </aside>
             <aside id="play">
-                <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
-                <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
+                <button id="true" onclick="this.getRootNode().host.submit(event)"></button>
+                <button id="false" onclick="this.getRootNode().host.submit(event)"></button>
                 <br><br>
                 <small id="scoreboard"></small>
                 <small id="total"></small>
@@ -53,21 +70,22 @@ template.innerHTML = `
     </main>
     <footer>
         <section>
-            <h4>Reward Summary</h4>
-            <h5 id="level">Level Mid</h5>
+            <h2 id="level">Level Mid</h2>
+            <h1>Reward Summary</h1>
         </section>
         <ul>
-            <li class="correct">Correct: <span id="correct"></span></li>
-            <li class="wrong">Wrong: <span id="wrong"></span></li>
+            <li class="corrects">Correct: <span id="correct"></span></li>
+            <li class="wrongs">Wrong: <span id="wrong"></span></li>
             <hr>
             <li class="score"><b id="high">High Score</b> <span id="score"></span></li>
             <li class="Highest">Highest <span id="highest"></span></li>
         </ul>
         <section>
-            <button id="restart" onclick="this.getRootNode().host.restart(event)">Reset Game</button>
-            <button id="collect">Collect Coins</button>
+            <button id="restart" onclick="this.getRootNode().host.restart(event)"><strong>Reset</strong> Game</button>
+            <button id="collect"><strong>Collect</strong> Coins</button>
         </section>
     </footer>
+    <nav id="fireworks"></nav>
 `;
 
 export default template;

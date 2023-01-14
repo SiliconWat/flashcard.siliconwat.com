@@ -31,6 +31,7 @@ class SwCard extends HTMLElement {
         card.addEventListener('swipeUp', e => this.submit(true));
         card.addEventListener('swipeDown', e => this.submit(false));
         attachSwipeGestures(card);
+        //this.#fireworks();
     }
 
     render(pointer=this.#pointer, game=this.#game) {
@@ -258,6 +259,11 @@ class SwCard extends HTMLElement {
         }
     }
 
+    #fireworks() {
+        this.shadowRoot.getElementById('fireworks').classList.add('fireworks');
+        setTimeout(() => this.shadowRoot.getElementById('fireworks').classList.remove('fireworks'), 20000);
+    }
+
     shuffle(event) {
         this.shadowRoot.getElementById('card').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
         localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
@@ -283,24 +289,26 @@ class SwCard extends HTMLElement {
 
     exit(event) {
         clearInterval(this.#timer);
+        localStorage.setItem(this.#pointer, 0);
         localStorage.removeItem(this.#time);
         localStorage.removeItem(this.#cards);
         localStorage.removeItem(this.#current);
+        localStorage.removeItem(this.#submitted);
         localStorage.removeItem(this.#correct);
         localStorage.removeItem(this.#wrong);
-        localStorage.removeItem(this.#submitted);
         this.renderMode('setting');
     }
 
     finish() {
+        this.#fireworks();
         const alert = new Audio("sounds/clap.mp3");
         if (Number(localStorage.getItem(this.#sound))) alert.play();
         clearInterval(this.#timer);
+        localStorage.setItem(this.#pointer, 'finished');
         localStorage.removeItem(this.#time);
         localStorage.removeItem(this.#mode);
         localStorage.removeItem(this.#current);
         localStorage.removeItem(this.#submitted);
-        localStorage.setItem(this.#pointer, 'finished');
         this.render();
     }
 

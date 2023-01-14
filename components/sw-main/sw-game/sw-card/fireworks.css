@@ -1,0 +1,70 @@
+.fireworks:before, .fireworks:after {
+  z-index: 1000;
+  content: "●";
+  font-size: 16px;
+  color: transparent;
+  position: absolute;
+  top: 0;
+  text-shadow: 17px 98px red, -2px -1px red, -63px 11px red, 56px -262px red, 137px 164px red, -20px -2px red, -215px -89px red, 6px 3px red, 257px -14px red, -6px -329px red, 134px 37px red, -194px -44px red, -184px -190px red, 276px 245px red, 23px 250px red, 31px 455px red, -109px 360px red, 64px 177px red, -61px -319px red, 160px -204px red, 164px 329px red, -194px 305px red, 155px 63px red, -55px 8px red, 71px 72px red, 197px 381px red, -113px 81px red, -187px 55px red, 12px -160px red, -3px 14px red, -38px -95px red, -3px -235px red, 8px 126px red, -32px -4px red, -28px 391px red, -187px 149px red, -15px -125px red, -281px 244px red, 191px -214px red, 194px 379px red, -40px 388px red, -66px 369px red, 193px 161px red, -262px -286px red, 250px -165px red, -49px -116px red, 68px -203px red, -198px -256px red, 264px 283px red, 287px -183px red, -88px 237px red, -106px -87px red, -154px 319px red, -9px 9px red, 111px -129px red, 29px 368px red, 0px 0px red, 67px 105px red, 50px -153px red, 192px 142px red, 269px -266px red, 12px 313px red, -71px -8px red, -107px -317px red, 281px -43px red, -162px -397px red, -152px -283px red, -143px 258px red, -84px 166px red, -296px 266px red, -355px -123px red, 242px 234px red, -271px 264px red, -84px 415px red, 293px 122px red, -251px -81px red, 218px 195px red, 314px -147px red, 310px -46px red, -263px -269px red, 211px -35px red;
+  animation: 2s  bang      ease-out  infinite backwards, 2s  gravity   ease-out   infinite backwards, 10s  position  linear    infinite forwards;
+}
+
+.fireworks:after {
+  animation-delay: -5s;
+  animation-duration: 2.5s, 2.5s, 12.5s;
+}
+
+@keyframes bang {
+  0%, 5% {
+    text-shadow: 0 0 transparent;
+  }
+  35% {
+    text-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+  }
+}
+@keyframes gravity {
+  0%, 5% {
+    font-size: 120%;
+    opacity: 0;
+    transform: translateY(340px);
+    animation-timing-function: ease-out;
+  }
+  35% {
+    transform: translateY(0px);
+    opacity: 1;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translateY(1000px);
+    opacity: 0;
+    font-size: 0;
+    animation-timing-function: ease-in;
+  }
+}
+@keyframes position {
+  0%, 20% {
+    margin-top: 50vh;
+    margin-left: 60vw;
+    filter: hue-rotate(0deg);
+  }
+  20.1%, 40% {
+    margin-top: 10vh;
+    margin-left: 30vw;
+    filter: hue-rotate(72deg);
+  }
+  40.1%, 60% {
+    margin-top: 30vh;
+    margin-left: 40vw;
+    filter: hue-rotate(144deg);
+  }
+  60.1%, 80% {
+    margin-top: 60vh;
+    margin-left: 70vw;
+    filter: hue-rotate(216deg);
+  }
+  80.1%, 100% {
+    margin-top: 30vh;
+    margin-left: 80vw;
+    filter: hue-rotate(288deg);
+  }
+}

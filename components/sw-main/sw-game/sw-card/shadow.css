@@ -2,7 +2,7 @@
     font-size: large;
 }
 
-header {
+header, footer {
     display: none;
     background-color: rgba(255, 255, 255, 70%);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -23,10 +23,6 @@ main {
     text-align: center;
     color: white;
     margin: 50px auto;
-}
-
-footer {
-
 }
 
 #card {
@@ -82,7 +78,7 @@ main p {
     line-height: 3;
 }
 
-h1 {
+main h1 {
     font-size: xx-large;
     color: whitesmoke;
     border: double white 5px;
@@ -96,6 +92,37 @@ aside {
     margin: 20px;
 }
 
+footer h1, select {
+    margin: 0 0 10px;
+    font-size: xx-large;
+    background-image: linear-gradient(#632c65, #3b2751);
+    padding: 10px;
+    color: #fff;
+    border-radius: 4px;
+    text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
+    text-align: center;
+}
+
+select {
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+header section:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+footer h2 {
+    margin: -10px auto 20px;
+    text-align: center;
+    color: #632c65;
+}
+
 button {
     color: white;
     box-shadow: inset 0 1px 1px rgba(111, 55, 125, 0.8), inset 0 -1px 0px rgba(63, 59, 113, 0.2), 0 9px 16px 0 rgba(0, 0, 0, 0.3), 0 4px 3px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px #150a1e;
@@ -103,6 +130,8 @@ button {
     text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
     padding: 5px 10px;
     border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
 }
 
 button:disabled {
@@ -127,6 +156,63 @@ button:disabled {
     color: red;
 }
 
+footer section:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+ol {
+    padding: 0;
+    padding-bottom: 1px;
+}
+
+ol:nth-of-type(1) {
+    list-style-type: "🎯";
+}
+
+ol:nth-of-type(2) {
+    list-style-type: "🕹";
+}
+
+ul {
+    padding: 1px 0;
+}
+
+li {
+    padding-left: 10px;
+    margin: 20px;
+}
+
+ul li {
+    font-weight: bold;
+    font-size: larger;
+}
+
+ul li span {
+    float: right;
+}
+
+li.corrects {
+    list-style-type: "👍🏼";
+    color: green;
+}
+
+li.wrongs {
+    list-style-type: "👎🏼";
+    color: red;
+}
+
+li.score {
+    list-style-type: "🏆";
+    font-size: x-large;
+}
+
+li.highest {
+    list-style-type: none;
+    color: grey;
+}
+
 #study, #play {
     display: none;
 }
@@ -140,10 +226,20 @@ figure {
     cursor: pointer;
 }
 
+#true, #false {
+    font-weight: bold;
+}
+
 #current2 {
     visibility: hidden;
 }
 
 @media (max-width: 480px) {
+    select, footer h1, footer h2 {
+        font-size: larger;
+    }
 
+    button {
+        font-size: 0.8em;
+    }
 }
