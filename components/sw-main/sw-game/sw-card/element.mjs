@@ -31,7 +31,6 @@ class SwCard extends HTMLElement {
         card.addEventListener('swipeUp', e => this.submit(true));
         card.addEventListener('swipeDown', e => this.submit(false));
         attachSwipeGestures(card);
-        //this.#fireworks();
     }
 
     render(pointer=this.#pointer, game=this.#game) {
@@ -241,13 +240,13 @@ class SwCard extends HTMLElement {
             if (choice === answer) {
                 alert = new Audio("sounds/correct.mp3");
                 localStorage.setItem(this.#correct, Number(localStorage.getItem(this.#correct)) + 1);
-                if (typeof event === 'object') event.target.textContent = "Correct"
-                else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👍🏼");
+                // if (typeof event === 'boolean') this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👍🏼")
+                // else event.target.textContent = "Correct";
             } else {
                 alert = new Audio("sounds/wrong.mp3");
                 localStorage.setItem(this.#wrong, Number(localStorage.getItem(this.#wrong)) + 1);
-                if (typeof event === 'object') event.target.textContent = "Wrong"
-                else this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👎🏼");
+                // if (typeof event === 'boolean') this.shadowRoot.querySelectorAll('#true, #false').forEach(element => element.textContent = "👎🏼")
+                // else event.target.textContent = "Wrong";
             }
 
             localStorage.setItem(this.#submitted, 1);

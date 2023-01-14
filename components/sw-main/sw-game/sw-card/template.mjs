@@ -2,6 +2,7 @@ const template = document.createElement("template");
 
 template.innerHTML = `
     <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/shadow.css">
+    <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/flashcard.css">
     <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/fireworks.css">
     <header>
         <select onchange="this.getRootNode().host.level(event)">
