@@ -1,10 +1,11 @@
+export function attachMouseGestures(element) {
+    element.addEventListener('mousedown', lock);
+    element.addEventListener('mouseup', e => move(e, element));
+}
+
 export function attachSwipeGestures(element) {
     element.addEventListener('touchmove', e => e.preventDefault());
-
-    element.addEventListener('mousedown', lock);
     element.addEventListener('touchstart', lock, { passive: true });
-    
-    element.addEventListener('mouseup', e => move(e, element));
     element.addEventListener('touchend', e => move(e, element));
 }
 
@@ -31,11 +32,11 @@ function move(e, element) {
             if (dy > 0) element.dispatchEvent(new Event('swipeDown'));
             if (dy < 0) element.dispatchEvent(new Event('swipeUp'));
             y = null;
-        } else {
+        } else if (dx === 0 && dy === 0) {
             element.dispatchEvent(new Event('swipeNone'));
-            x = null;
-            y = null;
+            x = null, y = null;
         }
+        
     }
 }
 

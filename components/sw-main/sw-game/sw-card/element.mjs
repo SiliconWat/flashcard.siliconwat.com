@@ -1,4 +1,5 @@
-import { attachSwipeGestures } from './swipe.mjs';
+import { DEVICE } from 'https://thonly.org/global.mjs';
+import { attachMouseGestures, attachSwipeGestures } from './swipe.mjs';
 import template from './template.mjs';
 
 class SwCard extends HTMLElement {
@@ -25,12 +26,15 @@ class SwCard extends HTMLElement {
 
     connectedCallback() {
         const card = this.shadowRoot.getElementById('card');
+        
         card.addEventListener('swipeNone', this.flip.bind(this));
         card.addEventListener('swipeLeft', e => this.next(e));
         card.addEventListener('swipeRight', e => this.previous(e));
         card.addEventListener('swipeUp', e => this.submit(true));
         card.addEventListener('swipeDown', e => this.submit(false));
-        attachSwipeGestures(card);
+
+        if (DEVICE[0] === 'ios' || DEVICE[0] === 'android') attachSwipeGestures(card)
+        else attachMouseGestures(card);
     }
 
     render(pointer=this.#pointer, game=this.#game) {
