@@ -6,16 +6,16 @@ template.innerHTML = `
     <link rel="stylesheet" href="components/sw-main/sw-game/sw-card/fireworks.css">
     <header>
         <select onchange="this.getRootNode().host.level(event)">
-            <option id="junior" value="junior">Game Level: Junior</option>
-            <option id="mid" value="mid">Game Level: Mid</option>
-            <option id="senior" value="senior">Game Level: Senior</option>
+            <option value="junior">Game Level: Junior</option>
+            <option value="mid">Game Level: Mid</option>
+            <option value="senior">Game Level: Senior</option>
         </select>
         <section>
             <h3>Game Levels</h3>
             <ol>
-                <li><strong>Junior</strong> Level: You get <em><strong>9</strong> seconds</em> per card.</li>
-                <li><strong>Mid</strong> Level: You get <em><strong>6</strong> seconds</em> per card.</li>
-                <li><strong>Senior</strong> Level: You get <em><strong>3</strong> seconds</em> per card.</li>
+                <li><strong>Junior</strong> Level: You get <em><strong id="junior"></strong> seconds</em> per card.</li>
+                <li><strong>Mid</strong> Level: You get <em><strong id="mid"></strong> seconds</em> per card.</li>
+                <li><strong>Senior</strong> Level: You get <em><strong id="senior"></strong> seconds</em> per card.</li>
             </ol>
             <h3>Swipe Gestures</h3>
             <ol>

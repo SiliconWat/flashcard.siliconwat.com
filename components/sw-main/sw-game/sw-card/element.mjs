@@ -26,7 +26,7 @@ class SwCard extends HTMLElement {
 
     connectedCallback() {
         const card = this.shadowRoot.getElementById('card');
-        
+
         card.addEventListener('swipeNone', this.flip.bind(this));
         card.addEventListener('swipeLeft', e => this.next(e));
         card.addEventListener('swipeRight', e => this.previous(e));
@@ -87,20 +87,58 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
             default:
-                this.shadowRoot.getElementById(localStorage.getItem(this.#level)).selected = true;
+                Object.keys(this.#levels).forEach(level => this.shadowRoot.getElementById(level).textContent = this.#levels[level]);
+                this.shadowRoot.querySelector(`option[value=${localStorage.getItem(this.#level)}]`).selected = true;
                 this.shadowRoot.querySelectorAll('.mode').forEach(element => element.disabled = this.#game.length === 0);
                 this.shadowRoot.querySelector('header').style.display = 'block';
         }
+    }
+
+    // HEADER //
+
+    #levels = {
+        junior: 9,
+        mid: 6,
+        senior: 3
     }
 
     level(event) {
         localStorage.setItem(this.#level, event.target.value);
     }
 
+    volume(event) {
+        localStorage.setItem(this.#sound, Number(event.target.id === 'sound'));
+        this.shadowRoot.getElementById(event.target.id).style.display = 'none';
+        this.shadowRoot.getElementById(event.target.id === 'sound' ? 'mute': 'sound').style.display = 'block';
+    }
+
     get cards() {
         const cards = JSON.parse(localStorage.getItem(this.#cards)) || (localStorage.getItem(this.#mode) === 'study' ? this.#game : this.#shuffle([...this.#game, ...this.#shuffle2(this.#game)]));
         localStorage.setItem(this.#cards, JSON.stringify(cards));
         return cards;
+    }
+
+    shuffle(event) {
+        this.shadowRoot.getElementById('card').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
+        localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
+        this.#renderCard();
+    }
+
+    #shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    #shuffle2(array) {
+        const clone = structuredClone(array);
+        for (let i = clone.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [clone[i][1], clone[j][1]] = [clone[j][1], clone[i][1]];
+        }
+        return clone;
     }
 
     #convertToRoman(num) {
@@ -112,7 +150,9 @@ class SwCard extends HTMLElement {
             str += i.repeat(q);
         }
         return str;
-      }
+    }
+
+    // MAIN //
 
     #renderCard() {
         const cards = this.cards;
@@ -150,12 +190,6 @@ class SwCard extends HTMLElement {
         this.shadowRoot.querySelector('main').style.display = 'flex';
     }
 
-    volume(event) {
-        localStorage.setItem(this.#sound, Number(event.target.id === 'sound'));
-        this.shadowRoot.getElementById(event.target.id).style.display = 'none';
-        this.shadowRoot.getElementById(event.target.id === 'sound' ? 'mute': 'sound').style.display = 'block';
-    }
-
     #setTime() {
         localStorage.setItem(this.#time, localStorage.getItem(this.#mode) === 'study' ? new Date() : this.#levelStartTime);
     }
@@ -182,12 +216,6 @@ class SwCard extends HTMLElement {
             const alert = new Audio("sounds/alert.mp3");
             alert.play();
         }
-    }
-
-    #levels = {
-        junior: 9,
-        mid: 6,
-        senior: 3
     }
 
     get #levelStartTime() {
@@ -262,34 +290,6 @@ class SwCard extends HTMLElement {
         }
     }
 
-    #fireworks() {
-        this.shadowRoot.getElementById('fireworks').classList.add('fireworks');
-        setTimeout(() => this.shadowRoot.getElementById('fireworks').classList.remove('fireworks'), 20000);
-    }
-
-    shuffle(event) {
-        this.shadowRoot.getElementById('card').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
-        localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
-        this.#renderCard();
-    }
-
-    #shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    #shuffle2(array) {
-        const clone = structuredClone(array);
-        for (let i = clone.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [clone[i][1], clone[j][1]] = [clone[j][1], clone[i][1]];
-        }
-        return clone;
-    }
-
     exit(event) {
         clearInterval(this.#timer);
         localStorage.setItem(this.#pointer, 0);
@@ -304,8 +304,6 @@ class SwCard extends HTMLElement {
 
     finish() {
         this.#fireworks();
-        const alert = new Audio("sounds/clap.mp3");
-        if (Number(localStorage.getItem(this.#sound))) alert.play();
         clearInterval(this.#timer);
         localStorage.setItem(this.#pointer, 'finished');
         localStorage.removeItem(this.#time);
@@ -313,6 +311,15 @@ class SwCard extends HTMLElement {
         localStorage.removeItem(this.#current);
         localStorage.removeItem(this.#submitted);
         this.render();
+    }
+
+    // FOOTER //
+
+    #fireworks() {
+        const alert = new Audio("sounds/clap.mp3");
+        if (Number(localStorage.getItem(this.#sound))) alert.play();
+        this.shadowRoot.getElementById('fireworks').classList.add('fireworks');
+        setTimeout(() => this.shadowRoot.getElementById('fireworks').classList.remove('fireworks'), 20000);
     }
 
     #renderResult() {    
