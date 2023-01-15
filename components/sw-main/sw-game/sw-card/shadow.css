@@ -25,9 +25,8 @@ aside {
 
 button {
     color: white;
-    box-shadow: inset 0 1px 1px rgba(111, 55, 125, 0.8), inset 0 -1px 0px rgba(63, 59, 113, 0.2), 0 9px 16px 0 rgba(0, 0, 0, 0.3), 0 4px 3px 0 rgba(0, 0, 0, 0.3), 0 0 0 1px #150a1e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     background-image: linear-gradient(#632c65, #3b2751);
-    text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 1em;
@@ -152,7 +151,6 @@ footer h1, select {
     padding: 10px;
     color: #fff;
     border-radius: 4px;
-    text-shadow: 0 0 21px rgba(223, 206, 228, 0.5), 0 -1px 0 #311d47;
     text-align: center;
 }
 
@@ -235,6 +233,6 @@ li.highest {
     }
 
     button {
-        font-size: 0.8em;
+        font-size: 0.5em;
     }
 }
