@@ -214,6 +214,11 @@ li.wrongs {
     color: red;
 }
 
+li.lefts {
+    list-style-type: "⏰";
+    color: grey;
+}
+
 li.score {
     list-style-type: "🏆";
     font-size: x-large;

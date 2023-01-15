@@ -346,6 +346,7 @@ class SwCard extends HTMLElement {
 
         this.shadowRoot.getElementById('correct').textContent = correct;
         this.shadowRoot.getElementById('wrong').textContent = wrong;
+        this.shadowRoot.getElementById('left').textContent = cards.length - correct - wrong;
         this.shadowRoot.getElementById('high').textContent = score > Score ? "New High" : "Score";
         this.shadowRoot.getElementById('highest').textContent = Score + "%";
         this.shadowRoot.getElementById('score').textContent = score + "%";

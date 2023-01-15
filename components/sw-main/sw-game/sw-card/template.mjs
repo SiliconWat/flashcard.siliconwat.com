@@ -77,6 +77,7 @@ template.innerHTML = `
         <ul>
             <li class="corrects">Correct: <span id="correct"></span></li>
             <li class="wrongs">Wrong: <span id="wrong"></span></li>
+            <li class="lefts">Left: <span id="left"></span></li>
             <hr>
             <li class="score"><b id="high">High Score</b> <span id="score"></span></li>
             <li class="Highest">Highest <span id="highest"></span></li>
