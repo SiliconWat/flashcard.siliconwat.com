@@ -69,12 +69,12 @@ class SwCard extends HTMLElement {
     }
 
     renderMode(mode) {
-        localStorage.setItem(this.#level, localStorage.getItem(this.#level) || 'junior');
         localStorage.setItem(this.#mode, mode);
         this.shadowRoot.querySelectorAll("header, main").forEach(element => element.style.display = 'none');
 
         switch (localStorage.getItem(this.#mode)) {
             case "study":
+                localStorage.setItem(this.#sound, localStorage.getItem(this.#sound) || 1);
                 this.#renderCard();
                 this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
@@ -87,6 +87,7 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelector('main').style.display = 'flex';
                 break;
             default:
+                localStorage.setItem(this.#level, localStorage.getItem(this.#level) || 'junior');
                 Object.keys(this.#levels).forEach(level => this.shadowRoot.getElementById(level).textContent = this.#levels[level]);
                 this.shadowRoot.querySelector(`option[value=${localStorage.getItem(this.#level)}]`).selected = true;
                 this.shadowRoot.querySelectorAll('.mode').forEach(element => element.disabled = this.#game.length === 0);
@@ -121,6 +122,7 @@ class SwCard extends HTMLElement {
     shuffle(event) {
         this.shadowRoot.getElementById('card').animate([{ transform: "rotateY(0deg)" }, { transform: "rotateY(360deg)" }], { duration: 500, iterations: 3 });
         localStorage.setItem(this.#cards, JSON.stringify(this.#shuffle(this.cards)));
+        localStorage.removeItem(this.#current);
         this.#renderCard();
     }
 
@@ -136,7 +138,7 @@ class SwCard extends HTMLElement {
         const clone = structuredClone(array);
         for (let i = clone.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [clone[i][1], clone[j][1]] = [clone[j][1], clone[i][1]];
+            [clone[i][2], clone[j][2]] = [clone[j][2], clone[i][2]];
         }
         return clone;
     }
@@ -184,7 +186,7 @@ class SwCard extends HTMLElement {
 
         this.shadowRoot.getElementById('code').textContent = cards[current] ? cards[current][0] : "TBA";
         this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][1] : "TBA";
-        this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code><pre>${this.#escapeHTML(cards[current][2])}</pre></code>` : "TBA";
+        this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code>${this.#escapeHTML(cards[current][2])}</code>` : "TBA"; // <pre></pre> => may need it for code game app
 
         this.shadowRoot.getElementById('true').disabled = false;
         this.shadowRoot.getElementById('false').disabled = false;
@@ -279,7 +281,7 @@ class SwCard extends HTMLElement {
             const cards = this.cards;
             const current = Number(localStorage.getItem(this.#current));
             const choice = typeof event === 'boolean' ? event : event.target.id === 'true';
-            const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1]);
+            const answer = this.#game.some(card => card[0] === cards[current][0] && card[1] === cards[current][1] && card[2] === cards[current][2]);
             
             if (choice === answer) {
                 alert = new Audio("sounds/correct.mp3");

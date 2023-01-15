@@ -96,6 +96,7 @@ main h1 {
 code {
     font-size: larger;
     font-weight: bold;
+    overflow-wrap: break-word;
 }
 
 #study, #play {
