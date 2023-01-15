@@ -80,7 +80,7 @@ main {
 }
 
 main p {
-    line-height: 3;
+    line-height: 2;
 }
 
 main h1 {
@@ -91,6 +91,11 @@ main h1 {
     width: fit-content;
     margin: auto;
     border-radius: 10px;
+}
+
+code {
+    font-size: larger;
+    font-weight: bold;
 }
 
 #study, #play {
@@ -108,10 +113,6 @@ figure {
 
 #true, #false {
     font-weight: bold;
-}
-
-#current2 {
-    visibility: hidden;
 }
 
 /* FOOTER */

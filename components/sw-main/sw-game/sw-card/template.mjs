@@ -49,7 +49,7 @@ template.innerHTML = `
             <div class="card front">
                 <h2 id="current"></h2>
                 <p id="front"></p>
-                <h2 id="current2"></h2>
+                <h6 id="code"></h6>
             </div>
             <div class="card back">
                 <p id="back"></p>

@@ -152,6 +152,18 @@ class SwCard extends HTMLElement {
         return str;
     }
 
+    #escapeHTML(html) {
+        const escape = document.createElement('textarea');
+        escape.textContent = html;
+        return escape.innerHTML;
+    }
+
+    #unescapeHTML(html) {
+        const escape = document.createElement('textarea');
+        escape.innerHTML = html;
+        return escape.textContent;
+    }
+
     // MAIN //
 
     #renderCard() {
@@ -164,15 +176,15 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('total').innerHTML = `( <strong>${cards.length}</strong> Total )`;
         this.shadowRoot.getElementById('scoreboard').innerHTML = `<strong class="correct">${localStorage.getItem(this.#correct)} 👍🏼</strong><strong class="wrong">${localStorage.getItem(this.#wrong)} 👎🏼</strong>`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
-        this.shadowRoot.getElementById('current2').textContent = this.shadowRoot.getElementById('current').textContent;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('next').style.display = (mode === 'study' && current < cards.length - 1) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('flip').style.display = (current < cards.length) ? 'inline-block' : 'none';
         this.shadowRoot.getElementById('quit').style.display = (mode === 'play' && current < cards.length) ? 'inline-block' : 'none';
 
-        this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][0] : "TBA";
-        this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code>${cards[current][1]}</code>` : "TBA";
+        this.shadowRoot.getElementById('code').textContent = cards[current] ? cards[current][0] : "TBA";
+        this.shadowRoot.getElementById('front').innerHTML = cards[current] ? cards[current][1] : "TBA";
+        this.shadowRoot.getElementById('back').innerHTML = cards[current] ? `<code><pre>${this.#escapeHTML(cards[current][2])}</pre></code>` : "TBA";
 
         this.shadowRoot.getElementById('true').disabled = false;
         this.shadowRoot.getElementById('false').disabled = false;
