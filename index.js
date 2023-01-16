@@ -1,8 +1,8 @@
-import { FRONTEND_COURSE as FRONTEND, SHOWCASE, QUIZ, GAME } from "https://thonly.org/global.mjs";
+import { FRONTEND_COURSE as FRONTEND, QUIZ, GAME } from "https://thonly.org/global.mjs";
 
 window.onload = async () => {
     await import(`${FRONTEND}/components/sw-music/element.mjs`);
-    await import(`${SHOWCASE}/components/sw-coin/element.mjs`);
+    await import(`${QUIZ}/components/sw-coin/element.mjs`);
 
     await import(`${QUIZ}/components/sw-header/element.mjs`);
     await import(`${QUIZ}/components/sw-footer/element.mjs`);
