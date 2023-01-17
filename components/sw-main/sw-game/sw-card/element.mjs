@@ -110,7 +110,11 @@ class SwCard extends HTMLElement {
     volume(event) {
         localStorage.setItem(this.#sound, Number(event.target.id === 'sound'));
         this.shadowRoot.getElementById(event.target.id).style.display = 'none';
-        this.shadowRoot.getElementById(event.target.id === 'sound' ? 'mute': 'sound').style.display = 'block';
+        this.shadowRoot.getElementById(event.target.id === 'sound' ? 'silence': 'sound').style.display = 'block';
+    }
+
+    speak(event) {
+
     }
 
     get cards() {
@@ -175,8 +179,9 @@ class SwCard extends HTMLElement {
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
-        this.shadowRoot.getElementById('total').innerHTML = `( <strong>${cards.length}</strong> Total )`;
-        this.shadowRoot.getElementById('scoreboard').innerHTML = `<strong class="correct">${localStorage.getItem(this.#correct)} 👍🏼</strong><strong class="wrong">${localStorage.getItem(this.#wrong)} 👎🏼</strong>`;
+        this.shadowRoot.getElementById('total').textContent = cards.length;
+        this.shadowRoot.getElementById('scoreboard').firstElementChild.textContent = `${localStorage.getItem(this.#correct)} 👍🏼`;
+        this.shadowRoot.getElementById('scoreboard').lastElementChild.textContent = `${localStorage.getItem(this.#wrong)} 👎🏼`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;
 
         this.shadowRoot.getElementById('previous').style.display = (mode === 'study' && current > 0) ? 'inline-block' : 'none';
@@ -199,7 +204,7 @@ class SwCard extends HTMLElement {
         
         this.shadowRoot.querySelectorAll("#study, #play").forEach(element => element.style.display = 'none');
         this.shadowRoot.getElementById('sound').style.display = sound ? 'none' : 'block';
-        this.shadowRoot.getElementById('mute').style.display = sound ? 'block' : 'none';
+        this.shadowRoot.getElementById('silence').style.display = sound ? 'block' : 'none';
         this.shadowRoot.getElementById(mode).style.display = 'block';
         this.shadowRoot.querySelector('main').style.display = 'flex';
     }

@@ -34,8 +34,10 @@ template.innerHTML = `
     <main>
         <section>
             <figure>
-                <img id="sound" onclick="this.getRootNode().host.volume(event)" src="sounds/sound.svg">
-                <img id="mute" onclick="this.getRootNode().host.volume(event)" src="sounds/mute.svg">
+                <img id="sound" onclick="this.getRootNode().host.volume(event)" src="images/sound.svg">
+                <img id="silence" onclick="this.getRootNode().host.volume(event)" src="images/silence.svg">
+                <img id="mic" onclick="this.getRootNode().host.speak(event)" src="images/mic.svg">
+                <img id="mute" onclick="this.getRootNode().host.speak(event)" src="images/mute.svg">
             </figure>
             <h1 id="timer"></h1>
             <aside>
@@ -64,8 +66,11 @@ template.innerHTML = `
                 <button id="true" onclick="this.getRootNode().host.submit(event)"></button>
                 <button id="false" onclick="this.getRootNode().host.submit(event)"></button>
                 <br><br>
-                <small id="scoreboard"></small>
-                <small id="total"></small>
+                <small id="scoreboard">
+                    <strong class="correct"></strong>
+                    <strong class="wrong"></strong>
+                </small>
+                <small>( <strong id="total"></strong> Total )</small>
             </aside>
         </section>
     </main>

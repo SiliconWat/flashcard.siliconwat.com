@@ -106,7 +106,7 @@ figure {
     display: inline-block;
 }
 
-#sound, #mute {
+figure img {
     display: none;
     cursor: pointer;
 }
