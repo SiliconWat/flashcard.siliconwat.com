@@ -66,6 +66,10 @@ ol:nth-of-type(2) {
     list-style-type: "🕹";
 }
 
+ol:nth-of-type(3) {
+    list-style-type: "📢";
+}
+
 /* MAIN */
 
 main {

@@ -19,11 +19,15 @@ template.innerHTML = `
             </ol>
             <h3>Swipe Gestures</h3>
             <ol>
-                <li><strong>Touch</strong> on the flashcard to <em>flip</em> it over.</li>
+                <li><strong>Tap</strong> on the flashcard to <em>flip</em> it over.</li>
                 <li><strong>Swipe Left</strong> on the flashcard to go to the <em>next</em> card.</li>
                 <li><strong>Swipe Right</strong> on the flashcard to go to the <em>previous</em> card.</li>
                 <li><strong>Swipe Up</strong> on the flashcard for <em>True</em>.</li>
                 <li><strong>Swipe Down</strong> on the flashcard for <em>False</em>.</li>
+            </ol>
+            <h3>Voice Commands</h3>
+            <ol>
+                <li>Coming soon...</li>
             </ol>
         </section>
         <section>
