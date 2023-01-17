@@ -195,8 +195,8 @@ class SwCard extends HTMLElement {
 
         this.shadowRoot.getElementById('true').disabled = false;
         this.shadowRoot.getElementById('false').disabled = false;
-        this.shadowRoot.getElementById('true').textContent = "True";
-        this.shadowRoot.getElementById('false').textContent = "False";
+        //this.shadowRoot.getElementById('true').textContent = "True";
+        //this.shadowRoot.getElementById('false').textContent = "False";
 
         this.shadowRoot.getElementById('front').parentElement.classList.remove('flipped');
         this.shadowRoot.getElementById('back').parentElement.classList.remove('flipped');

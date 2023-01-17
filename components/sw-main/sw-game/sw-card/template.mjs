@@ -67,8 +67,8 @@ template.innerHTML = `
                 <button onclick="this.getRootNode().host.exit(event)">Exit</button>
             </aside>
             <aside id="play">
-                <button id="true" onclick="this.getRootNode().host.submit(event)"></button>
-                <button id="false" onclick="this.getRootNode().host.submit(event)"></button>
+                <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
+                <button id="false" onclick="this.getRootNode().host.submit(event)">False</button>
                 <br><br>
                 <small id="scoreboard">
                     <strong class="correct"></strong>
