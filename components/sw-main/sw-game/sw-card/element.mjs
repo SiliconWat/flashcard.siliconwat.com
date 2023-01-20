@@ -179,7 +179,7 @@ class SwCard extends HTMLElement {
         const current = Number(localStorage.getItem(this.#current));
         if (mode === 'study') this.#startTimer();
 
-        this.shadowRoot.getElementById('total').textContent = cards.length;
+        this.shadowRoot.querySelectorAll('.total').forEach(element => element.textContent = cards.length);
         this.shadowRoot.getElementById('scoreboard').firstElementChild.textContent = `${localStorage.getItem(this.#correct)} 👍🏼`;
         this.shadowRoot.getElementById('scoreboard').lastElementChild.textContent = `${localStorage.getItem(this.#wrong)} 👎🏼`;
         this.shadowRoot.getElementById('current').textContent = cards[current] ? this.#convertToRoman(current + 1) : 0;

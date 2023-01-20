@@ -65,6 +65,8 @@ template.innerHTML = `
             <aside id="study">
                 <button onclick="this.getRootNode().host.shuffle(event)"><strong>Shuffle</strong> Cards</button>
                 <button onclick="this.getRootNode().host.exit(event)">Exit</button>
+                <br><br>
+                <small>( <strong class="total"></strong> Total )</small>
             </aside>
             <aside id="play">
                 <button id="true" onclick="this.getRootNode().host.submit(event)">True</button>
@@ -74,7 +76,7 @@ template.innerHTML = `
                     <strong class="correct"></strong>
                     <strong class="wrong"></strong>
                 </small>
-                <small>( <strong id="total"></strong> Total )</small>
+                <small>( <strong class="total"></strong> Total )</small>
             </aside>
         </section>
     </main>
