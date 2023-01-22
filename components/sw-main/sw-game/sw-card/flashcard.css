@@ -47,3 +47,10 @@
 .card.back.flipped {
     transform: rotateY(0deg);
 }
+
+@media (max-width: 480px) {
+    #card {
+        min-width: calc(var(--card-width) - 30px);
+        min-height: calc(var(--card-height) - 30px);
+    }
+}

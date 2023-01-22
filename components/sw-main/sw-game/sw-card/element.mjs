@@ -93,6 +93,8 @@ class SwCard extends HTMLElement {
                 this.shadowRoot.querySelectorAll('.mode').forEach(element => element.disabled = this.#game.length === 0);
                 this.shadowRoot.querySelector('header').style.display = 'block';
         }
+
+        document.body.scrollIntoView({ behavior: "smooth", block: "start", inline: "center" });
     }
 
     // HEADER //
@@ -207,6 +209,7 @@ class SwCard extends HTMLElement {
         this.shadowRoot.getElementById('silence').style.display = sound ? 'block' : 'none';
         this.shadowRoot.getElementById(mode).style.display = 'block';
         this.shadowRoot.querySelector('main').style.display = 'flex';
+        this.scrollIntoView({ behavior: "smooth", block: "start", inline: "center" });
     }
 
     #setTime() {
