@@ -39,7 +39,3 @@ function move(e, element) {
         
     }
 }
-
-// possible to set css var!
-// element.style.setProperty('--x', x += Math.sign(dx));
-// element.style.setProperty('--y', y += Math.sign(dy));
