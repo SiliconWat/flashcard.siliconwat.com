@@ -231,7 +231,7 @@ li.highest {
     color: grey;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) or (max-height: 480px) {
     select, footer h1, footer h2 {
         font-size: larger;
     }

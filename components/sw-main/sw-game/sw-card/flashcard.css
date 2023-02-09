@@ -48,7 +48,7 @@
     transform: rotateY(0deg);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 480px) or (max-height: 480px) {
     #card {
         min-width: calc(var(--card-width) - 30px);
         min-height: calc(var(--card-height) - 30px);
